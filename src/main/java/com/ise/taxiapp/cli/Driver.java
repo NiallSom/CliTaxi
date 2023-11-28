@@ -59,6 +59,11 @@ public class Driver implements UI {
     }
 
     @Override
+    public void informOnRoute() {
+        System.out.println("Taxi on the way!");
+    }
+
+    @Override
     public void informArrived() {
         System.out.println("The taxi has arrived!");
     }
