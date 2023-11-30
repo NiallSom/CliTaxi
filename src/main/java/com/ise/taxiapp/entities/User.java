@@ -17,4 +17,7 @@ public class User {
         Taxi taxi = destination.getRegion().findNearest(fare);
         taxi.task(this, destination);
     }
+    public void charge(Fare fare){
+        this.balance -= fare.calculateFare(distance);
+    }
 }
