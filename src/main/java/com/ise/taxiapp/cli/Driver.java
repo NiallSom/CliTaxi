@@ -2,10 +2,8 @@ package com.ise.taxiapp.cli;
 
 import com.ise.taxiapp.UI;
 import com.ise.taxiapp.entities.User;
-import com.ise.taxiapp.entities.fare.ExpressFare;
-import com.ise.taxiapp.entities.fare.ExtraLargeFare;
 import com.ise.taxiapp.entities.fare.Fare;
-import com.ise.taxiapp.entities.fare.StandardFare;
+import com.ise.taxiapp.entities.fare.FareType;
 import com.ise.taxiapp.nav.Location;
 import com.ise.taxiapp.nav.Point;
 
@@ -49,9 +47,9 @@ public class Driver implements UI {
                 (1) Express
                 (2) XL""";
         Fare fare = switch (promptInput(farePrompt, 2, scanner)) {
-            case 0 -> new StandardFare();
-            case 1 -> new ExpressFare();
-            case 2 -> new ExtraLargeFare();
+            case 0 -> new Fare(FareType.STANDARDFARE);
+            case 1 -> new Fare(FareType.EXPRESSFARE);
+            case 2 -> new Fare(FareType.EXTRALARGEFARE);
             default -> { // unreachable, fare only allows valid inputs
             }
         };
@@ -76,5 +74,37 @@ public class Driver implements UI {
     @Override
     public void informTripComplete() {
         System.out.println("Trip complete!");
+    }
+
+    @Override
+    public void rateTaxi(com.ise.taxiapp.entities.Driver driver) {
+        boolean option = false;
+        Scanner scanner = new Scanner(System.in);
+        while (!option) {
+            System.out.print("Would you like to rate the taxi driver(y/n)?: ");
+            String choice = scanner.next();
+            if (choice.equalsIgnoreCase("y")){
+                boolean yesOption = false;
+                while (!yesOption){
+                    System.out.print("Please enter your rating(0-5): ");
+                    int rating = scanner.nextInt();
+                    if (rating <= 5 && rating >=0) {
+                        System.out.println("Your rating has been submitted");
+                        yesOption = true;
+                        option = true;
+                    }
+                    else {
+                        System.out.println("That is not a valid rating");
+                    }
+                }
+            }
+            else if (choice.equalsIgnoreCase("n")) {
+                System.out.println("OK");
+                option = true;
+            }
+            else {
+                System.out.println("That's not an option, please try again!");
+            }
+        }
     }
 }
