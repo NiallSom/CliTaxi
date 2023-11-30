@@ -20,4 +20,16 @@ public class Taxi{
     public void driveTo(Location location){
         ui.informOnRoute();
     }
+    public void driveTo(Location location, Fare fare){
+        return;//implement 2nd drive to method
+    }
+    public void pickup(User user){
+        return; // implement pickup method
+    }
+    public void task(User user){
+        driveTo(user.currentLocation);
+        pickup(user);
+        driveTo(user.currentLocation, this.fare);
+        user.charge(this.fare);
+    }
 }
