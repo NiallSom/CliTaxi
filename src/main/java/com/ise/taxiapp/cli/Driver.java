@@ -9,6 +9,8 @@ import com.ise.taxiapp.nav.Point;
 
 import java.util.Scanner;
 
+import static com.ise.taxiapp.cli.Util.promptInput;
+
 public class Driver implements UI {
     User user;
     Scanner scanner;
@@ -27,7 +29,7 @@ public class Driver implements UI {
                 Would you like to book a taxi?
                 (0) Yes
                 (1) No""";
-        while (prompInput(continuePrompt, 1, scanner) == 0) {
+        while (promptInput(continuePrompt, 1, scanner) == 0) {
             callTaxi();
         }
         System.out.println("""
@@ -50,8 +52,7 @@ public class Driver implements UI {
             case 0 -> new Fare(FareType.STANDARDFARE);
             case 1 -> new Fare(FareType.EXPRESSFARE);
             case 2 -> new Fare(FareType.EXTRALARGEFARE);
-            default -> { // unreachable, fare only allows valid inputs
-            }
+            default -> null; // unreachable, promptInput only allows valid inputs
         };
         user.callTaxi(destination, fare);
     }
