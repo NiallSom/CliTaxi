@@ -79,32 +79,8 @@ public class Driver implements UI {
     @Override
     public void rateTaxi(com.ise.taxiapp.entities.Driver driver) {
         boolean option = false;
-        Scanner scanner = new Scanner(System.in);
-        while (!option) {
-            System.out.print("Would you like to rate the taxi driver(y/n)?: ");
-            String choice = scanner.next();
-            if (choice.equalsIgnoreCase("y")){
-                boolean yesOption = false;
-                while (!yesOption){
-                    System.out.print("Please enter your rating(0-5): ");
-                    int rating = scanner.nextInt();
-                    if (rating <= 5 && rating >=0) {
-                        System.out.println("Your rating has been submitted");
-                        yesOption = true;
-                        option = true;
-                    }
-                    else {
-                        System.out.println("That is not a valid rating");
-                    }
-                }
-            }
-            else if (choice.equalsIgnoreCase("n")) {
-                System.out.println("OK");
-                option = true;
-            }
-            else {
-                System.out.println("That's not an option, please try again!");
-            }
-        }
+        int rating = promptInput("""
+            How would you rate your ride?
+            Rate from 0-5""", 5, scanner);
     }
 }
