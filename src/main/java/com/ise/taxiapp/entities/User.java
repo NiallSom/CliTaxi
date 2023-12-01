@@ -9,14 +9,17 @@ public class User {
     List<Ride> rideHistory;
     Location currentLocation;
     double balance;
-    public User(String username){
+
+    public User(String username) {
         this.username = username;
     }
+
     public void callTaxi(Location destination, Fare fare) {
-        Taxi taxi = destination.getRegion().findNearest(fare);
+        Taxi taxi = destination.getRegion().findNearestTaxi(currentLocation, fare);
         taxi.task(this, destination);
     }
-    public void charge(Fare fare, double distance){
+
+    public void charge(Fare fare, double distance) {
         this.balance -= fare.calculateFare(distance);
     }
 }
