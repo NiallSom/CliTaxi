@@ -1,6 +1,5 @@
 package com.ise.taxiapp.entities;
 
-import com.ise.taxiapp.entities.fare.Fare;
 import com.ise.taxiapp.nav.Location;
 
 import java.util.List;
@@ -16,5 +15,8 @@ public class User {
     public void callTaxi(Location destination, Fare fare) {
         Taxi taxi = destination.getRegion().findNearest(fare);
         taxi.task(this, destination);
+    }
+    public void charge(Fare fare, double distance){
+        this.balance -= fare.calculateFare(distance);
     }
 }

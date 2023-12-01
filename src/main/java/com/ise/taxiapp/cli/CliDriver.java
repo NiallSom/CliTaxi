@@ -1,22 +1,22 @@
 package com.ise.taxiapp.cli;
 
 import com.ise.taxiapp.UI;
+import com.ise.taxiapp.entities.Driver;
 import com.ise.taxiapp.entities.User;
-import com.ise.taxiapp.entities.fare.ExpressFare;
-import com.ise.taxiapp.entities.fare.ExtraLargeFare;
-import com.ise.taxiapp.entities.fare.Fare;
-import com.ise.taxiapp.entities.fare.StandardFare;
+import com.ise.taxiapp.entities.Fare;
 import com.ise.taxiapp.nav.Location;
 import com.ise.taxiapp.nav.Point;
 
 import java.util.Scanner;
 
-public class Driver implements UI {
+import static com.ise.taxiapp.cli.Util.promptInput;
+
+public class CliDriver implements UI {
     User user;
     Scanner scanner;
 
     public static void main(String[] args) {
-        new Driver().run();
+        new CliDriver().run();
     }
 
     public void run() {
@@ -29,7 +29,7 @@ public class Driver implements UI {
                 Would you like to book a taxi?
                 (0) Yes
                 (1) No""";
-        while (prompInput(continuePrompt, 1, scanner) == 0) {
+        while (promptInput(continuePrompt, 1, scanner) == 0) {
             callTaxi();
         }
         System.out.println("""
@@ -42,18 +42,18 @@ public class Driver implements UI {
         System.out.println("Where to?");
         System.out.print("Enter a grid index from 1-100: ");
         int destinationIndex = scanner.nextInt();
-        Location destination = new Point(destinationIndex);
+        // Todo magic number
+        Location destination = Point.fromIndex(destinationIndex, 10);
         String farePrompt = """
                 What type of ride are you looking for?
                 (0) Standard
                 (1) Express
                 (2) XL""";
         Fare fare = switch (promptInput(farePrompt, 2, scanner)) {
-            case 0 -> new StandardFare();
-            case 1 -> new ExpressFare();
-            case 2 -> new ExtraLargeFare();
-            default -> { // unreachable, fare only allows valid inputs
-            }
+            case 0 -> new Fare(Fare.STANDARD_FARE);
+            case 1 -> new Fare(Fare.EXPRESS_FARE);
+            case 2 -> new Fare(Fare.EXTRA_LARGE_FARE);
+            default -> null; // unreachable, promptInput only allows valid inputs
         };
         user.callTaxi(destination, fare);
     }
@@ -76,5 +76,13 @@ public class Driver implements UI {
     @Override
     public void informTripComplete() {
         System.out.println("Trip complete!");
+    }
+
+    @Override
+    public void rateTaxi(Driver driver) {
+        boolean option = false;
+        int rating = promptInput("""
+            How would you rate your ride?
+            Rate from 0-5""", 5, scanner);
     }
 }
