@@ -9,6 +9,10 @@ public class Point implements Location {
         this.y = y;
     }
 
+    public static Point fromIndex(int index, int gridWidth) {
+        return new Point(index % gridWidth, index / gridWidth);
+    }
+
     @Override
     public Region getRegion() {
         return null;

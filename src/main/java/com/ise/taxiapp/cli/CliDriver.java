@@ -42,7 +42,8 @@ public class Driver implements UI {
         System.out.println("Where to?");
         System.out.print("Enter a grid index from 1-100: ");
         int destinationIndex = scanner.nextInt();
-        Location destination = new Point(destinationIndex);
+        // Todo magic number
+        Location destination = Point.fromIndex(destinationIndex, 10);
         String farePrompt = """
                 What type of ride are you looking for?
                 (0) Standard
