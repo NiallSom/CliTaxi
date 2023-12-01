@@ -1,6 +1,7 @@
 package com.ise.taxiapp.cli;
 
 import com.ise.taxiapp.UI;
+import com.ise.taxiapp.entities.Driver;
 import com.ise.taxiapp.entities.User;
 import com.ise.taxiapp.entities.fare.Fare;
 import com.ise.taxiapp.entities.fare.FareType;
@@ -11,12 +12,12 @@ import java.util.Scanner;
 
 import static com.ise.taxiapp.cli.Util.promptInput;
 
-public class Driver implements UI {
+public class CliDriver implements UI {
     User user;
     Scanner scanner;
 
     public static void main(String[] args) {
-        new Driver().run();
+        new CliDriver().run();
     }
 
     public void run() {
@@ -79,7 +80,7 @@ public class Driver implements UI {
     }
 
     @Override
-    public void rateTaxi(com.ise.taxiapp.entities.Driver driver) {
+    public void rateTaxi(Driver driver) {
         boolean option = false;
         int rating = promptInput("""
             How would you rate your ride?
