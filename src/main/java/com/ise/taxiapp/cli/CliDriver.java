@@ -3,8 +3,7 @@ package com.ise.taxiapp.cli;
 import com.ise.taxiapp.UI;
 import com.ise.taxiapp.entities.Driver;
 import com.ise.taxiapp.entities.User;
-import com.ise.taxiapp.entities.fare.Fare;
-import com.ise.taxiapp.entities.fare.FareType;
+import com.ise.taxiapp.entities.Fare;
 import com.ise.taxiapp.nav.Location;
 import com.ise.taxiapp.nav.Point;
 
@@ -51,9 +50,9 @@ public class CliDriver implements UI {
                 (1) Express
                 (2) XL""";
         Fare fare = switch (promptInput(farePrompt, 2, scanner)) {
-            case 0 -> new Fare(FareType.STANDARDFARE);
-            case 1 -> new Fare(FareType.EXPRESSFARE);
-            case 2 -> new Fare(FareType.EXTRALARGEFARE);
+            case 0 -> new Fare(Fare.STANDARD_FARE);
+            case 1 -> new Fare(Fare.EXPRESS_FARE);
+            case 2 -> new Fare(Fare.EXTRA_LARGE_FARE);
             default -> null; // unreachable, promptInput only allows valid inputs
         };
         user.callTaxi(destination, fare);

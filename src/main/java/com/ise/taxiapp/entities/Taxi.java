@@ -1,7 +1,6 @@
 package com.ise.taxiapp.entities;
 
 import com.ise.taxiapp.UI;
-import com.ise.taxiapp.entities.fare.Fare;
 import com.ise.taxiapp.nav.Location;
 
 public class Taxi{

@@ -1,6 +1,5 @@
 package com.ise.taxiapp.entities;
 
-import com.ise.taxiapp.entities.fare.Fare;
 import com.ise.taxiapp.nav.Location;
 
 import java.util.List;
