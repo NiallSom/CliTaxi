@@ -5,15 +5,16 @@ public enum Fare {
     EXTRA_LARGE_FARE(6, 6),
     EXPRESS_FARE(10, 4);
 
-    final double initial;
-    final double meter;
+    final private double initial;
+    final private double meter;
 
     Fare(double initial, double meter) {
         this.initial = initial;
         this.meter = meter;
     }
 
-    public double calculateFare(double distance) {
+    public double calculateCharge(double distance) {
         return (distance * meter) + initial;
     }
+
 }
