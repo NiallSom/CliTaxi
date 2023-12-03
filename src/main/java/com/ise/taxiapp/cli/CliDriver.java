@@ -1,5 +1,6 @@
 package com.ise.taxiapp.cli;
 
+import com.ise.taxiapp.entities.Driver;
 import com.ise.taxiapp.entities.Fare;
 import com.ise.taxiapp.entities.Taxi;
 import com.ise.taxiapp.entities.User;
@@ -31,7 +32,11 @@ public class CliDriver {
         System.out.print("Please enter your username: ");
         String username = scanner.next();
         user = new User(username);
+        user.setCurrentLocation(new Point(5, 5));
         region = initRegion();
+        Taxi taxi = new Taxi("123", new Driver("John", "456"), Fare.STANDARD_FARE);
+        taxi.setLocation(new Point(0, 0));
+        region.insertTaxi(taxi);
 
         String continuePrompt = """
                 Would you like to book a taxi?

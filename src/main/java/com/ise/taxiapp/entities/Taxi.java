@@ -19,6 +19,10 @@ public class Taxi {
         isAvailable = true;
     }
 
+    public void setLocation(Location currentLocation) {
+        this.currentLocation = currentLocation;
+    }
+
     public Fare getFare() {
         return fare;
     }
