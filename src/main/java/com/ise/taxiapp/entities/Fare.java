@@ -13,7 +13,8 @@ public enum Fare {
         this.meter = meter;
     }
 
-    public double calculateFare(double distance) {
+    public double calculateCharge(double distance) {
         return (distance * meter) + initial;
     }
+
 }
