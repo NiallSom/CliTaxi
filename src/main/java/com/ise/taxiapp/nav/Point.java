@@ -13,6 +13,7 @@ public record Point(int x, int y) implements Location {
 
     @Override
     public double distanceTo(Location other) {
+        // This also accounts for other being null
         if (!(other instanceof Point point)) {
             throw new IllegalArgumentException("Argument must be of type Point");
         }
