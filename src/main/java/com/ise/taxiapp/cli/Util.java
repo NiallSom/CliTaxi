@@ -31,6 +31,31 @@ public class Util {
     }
 
     /**
+     * Clears the screen, prints the given string, and prompts the user to press enter.
+     *
+     * @param s The String to display
+     */
+    public static void displayText(String s) {
+        clearScreen();
+        System.out.println(s);
+        promptEnter();
+    }
+
+    /**
+     * Similar to printf, but clears the screen first, and finishes by prompting the user to press enter.
+     *
+     * @param s    A format string as described in <a
+     *             href="../util/Formatter.html#syntax">Format string syntax</a>
+     * @param args Arguments referenced by the format specifiers in the format
+     *             string.
+     */
+    public static void displayText(String s, Object... args) {
+        clearScreen();
+        System.out.printf(s, args);
+        promptEnter();
+    }
+
+    /**
      * Clears the terminal
      */
     public static void clearScreen() {
