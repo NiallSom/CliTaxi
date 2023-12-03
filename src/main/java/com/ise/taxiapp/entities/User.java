@@ -35,4 +35,8 @@ public class User {
     public List<Ride> getRideHistory() {
         return rideHistory;
     }
+
+    public double getBalance() {
+        return balance;
+    }
 }
