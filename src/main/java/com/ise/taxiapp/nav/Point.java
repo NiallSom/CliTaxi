@@ -1,13 +1,6 @@
 package com.ise.taxiapp.nav;
 
-public class Point implements Location {
-    private final int x;
-    private final int y;
-
-    public Point(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
+public record Point(int x, int y) implements Location {
 
     public static Point fromIndex(int index, int gridWidth) {
         return new Point(index % gridWidth, index / gridWidth);
@@ -24,15 +17,7 @@ public class Point implements Location {
             throw new IllegalArgumentException("Argument must be of type Point");
         }
         // Pythagoras
-        return Math.sqrt(Math.pow((point.getX() - this.x), 2)
-                + Math.pow((point.getY() - this.y), 2));
-    }
-
-    public int getX() {
-        return this.x;
-    }
-
-    public int getY() {
-        return this.y;
+        return Math.sqrt(Math.pow((point.x() - this.x), 2)
+                + Math.pow((point.y() - this.y), 2));
     }
 }
