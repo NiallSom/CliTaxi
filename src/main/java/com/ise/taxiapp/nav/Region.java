@@ -14,12 +14,33 @@ public class Region {
         taxiList = new LinkedList<>();
     }
 
-    public void insertTaxi(Taxi taxi) {
+    public boolean insertTaxi(Taxi taxi) {
+        if (taxiList.contains(taxi)) {
+            return false;
+        }
         taxiList.add(taxi);
+        return true;
     }
 
-    public void removeTaxi(Taxi taxi) {
-        taxiList.remove(taxi);
+    public boolean removeTaxi(Taxi taxi) {
+        return taxiList.remove(taxi);
+    }
+
+    public int taxiCount() {
+        return taxiList.size();
+    }
+
+    /**
+     * Required to make Salah's testing interface work.
+     *
+     * @param reg The registration plate of the taxi
+     * @return The taxi with the given reg, or null if it's not on the map
+     */
+    public Taxi fromReg(String reg) {
+        return taxiList.stream()
+                .filter(taxi -> taxi.getReg().equals(reg))
+                .findAny()
+                .orElse(null);
     }
 
     /**
