@@ -14,11 +14,6 @@ public class Point implements Location {
     }
 
     @Override
-    public Region getRegion() {
-        return null;
-    }
-
-    @Override
     public double distanceTo(Location other) {
         if (!(other instanceof Point point)) {
             throw new IllegalArgumentException("Argument must be of type Point");
