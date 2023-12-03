@@ -11,12 +11,15 @@ public class Taxi {
     private Location destination;
     private double distanceTravelled;
     private boolean isAvailable;
-
     public Taxi(String reg, Driver driver, Fare fare) {
         this.reg = reg;
         this.driver = driver;
         this.fare = fare;
         isAvailable = true;
+    }
+
+    public void setLocation(Location currentLocation) {
+        this.currentLocation = currentLocation;
     }
 
     public Fare getFare() {
@@ -47,6 +50,7 @@ public class Taxi {
     public Location getLocation() {
         return currentLocation;
     }
+
 
     public Driver getDriver() {
         return driver;
