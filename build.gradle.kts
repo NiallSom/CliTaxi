@@ -14,6 +14,10 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
+tasks.jar {
+    manifest.attributes["Main-Class"] = "com.ise.taxiapp.cli.CliDriver"
+}
+
 tasks.test {
     useJUnitPlatform()
 }
