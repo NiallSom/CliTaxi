@@ -27,6 +27,9 @@ public class LinkedList<T> {
         }
         this.current = this.current.previous;
     }
+    public boolean isLast() {
+        return this.current.next == null;
+    }
     public boolean isEmpty(){
         return head == null;
     }
