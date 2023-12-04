@@ -10,7 +10,6 @@ public class LinkedListTest {
         list.insert("Pizza5");
         list.insert("Pizza6");
         list.insert("Pizza7");
-        list.getPrevious();
         list.remove();
         list.printList();
         System.out.println(list.retrieve());
