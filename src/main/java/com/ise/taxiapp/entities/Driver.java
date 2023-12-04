@@ -20,11 +20,7 @@ public class Driver {
     }
 
     public double getRating() {
-        double total = 0;
-        for (int rating : ratings) {
-            total += rating;
-        }
-        return total / ratings.size();
+        return ratings.stream().mapToDouble(a -> a).average().orElse(0.0);
     }
 
     public String getName() {
