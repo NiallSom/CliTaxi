@@ -94,19 +94,20 @@ public class LinkedList<T> {
         size--;
         if (this.current == head) {
             if (this.current.next != null) {
-                head = this.current.next;
+                current = head = this.current.next;
                 return;
             }
-            head = null;
+            current = head = null;
         }
 
         if (this.current.next != null) {
             this.current.next.previous = this.current.previous;
             this.current.previous.next = this.current.next;
             this.current = this.current.next;
+        } else {
+            this.current.previous.next = null;
+            this.current = this.current.previous;
         }
-        this.current.previous.next = null;
-        this.current = this.current.previous;
     }
 
     public void clear() {
