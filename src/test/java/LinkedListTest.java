@@ -33,6 +33,7 @@ public class LinkedListTest {
         };
         list.forEach(s -> ref.count++);
         assertEquals(2, ref.count);
+
         list.findFirst();
         list.remove();
         assertEquals(1, list.size());
@@ -40,6 +41,8 @@ public class LinkedListTest {
         // Clearing
         list.clear();
         assertTrue(list.isEmpty());
+        assertThrows(UnsupportedOperationException.class, list::retrieve);
+        assertThrows(UnsupportedOperationException.class, list::remove);
     }
 
     @Test
