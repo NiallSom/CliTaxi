@@ -95,6 +95,7 @@ public class LinkedList<T> {
             throw new UnsupportedOperationException("Cannot remove from an empty list");
         }
         size--;
+
         if (this.current == head) {
             if (this.current.next != null) {
                 current = head = this.current.next;
@@ -102,14 +103,17 @@ public class LinkedList<T> {
             }
             current = head = null;
         }
-
-        if (this.current.next != null) {
-            this.current.next.previous = this.current.previous;
-            this.current.previous.next = this.current.next;
-            this.current = this.current.next;
-        } else {
-            this.current.previous.next = null;
-            this.current = this.current.previous;
+        if (this.current !=null) {
+            if (this.current.next != null) {
+                this.current.next.previous = this.current.previous;
+                this.current.previous.next = this.current.next;
+                this.current = this.current.next;
+            } else {
+                this.current.previous.next = null;
+                this.current = this.current.previous;
+            }
+        }else {
+            current = head = null;
         }
     }
 
