@@ -1,45 +1,71 @@
 package com.ise.taxiapp.dataStructures;
 
+import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 public class LinkedList<T> {
     private ListNode head;
     private ListNode current;
-    private class ListNode {
-        private final T data;
-        private ListNode next;
-        private ListNode previous;
-        public ListNode(T data) {
-            this.data = data;
-            this.next = null;
-            this.previous = null;
-        }
+    private int size;
+
+    public LinkedList() {
+        head = current = null;
+        size = 0;
     }
-    public void getNext(){
+
+    public void getNext() {
         if (this.current.next == null) {
             System.out.println("There is no next node");
             return;
         }
         this.current = this.current.next;
     }
-    public void getPrevious(){
+
+    public void getPrevious() {
         if (this.current.previous == null) {
             System.out.println("There is no previous node");
             return;
         }
         this.current = this.current.previous;
     }
-    public boolean isLast() {
-        return this.current.next == null;
+
+    public int size() {
+        return size;
     }
-    public boolean isEmpty(){
+
+    public boolean isLast() {
+        return isEmpty() || this.current.next == null;
+    }
+
+    public boolean isEmpty() {
         return head == null;
     }
+
     public T retrieve() {
         return this.current.data;
     }
-    public void insert(T data){
+
+    public void findFirst() {
+        current = head;
+    }
+
+    public void forEach(Consumer<T> action) {
+        findFirst();
+        while (!isLast()) {
+            action.accept(current.data);
+            getNext();
+        }
+        action.accept(current.data);
+    }
+
+    public void add(T data) {
         ListNode newNode = new ListNode(data);
+        size++;
         if (isEmpty()) {
-            System.out.println("List is empty, creating a new head");
             this.current = head = newNode;
             return;
         }
@@ -50,22 +76,22 @@ public class LinkedList<T> {
         }
         this.current.next = newNode;
         this.current = newNode;
-
     }
-    public void printList(){
+
+    public void printList() {
         ListNode temp = head;
-        while (temp != null){
-            System.out.print(temp.data+" -> ");
+        while (temp != null) {
+            System.out.print(temp.data + " -> ");
             temp = temp.next;
         }
         System.out.println();
     }
     public void remove() {
         if (isEmpty()) {
-            System.out.println("List is empty cannot remove item");
-            return;
+            throw new UnsupportedOperationException("Cannot remove from an empty list");
         }
-        if (this.current == head){
+        size--;
+        if (this.current == head) {
             if (this.current.next != null){
                 head = this.current.next;
                 return;
@@ -78,8 +104,45 @@ public class LinkedList<T> {
             this.current.previous.next = this.current.next;
             this.current = this.current.next;
         }
-        this.current.previous.next = null;
-        this.current = this.current.previous;
+            this.current.previous.next = null;
+            this.current = this.current.previous;
+        }
+    }
 
+    public void clear() {
+        head = current = null;
+    }
+
+    public Stream<T> stream() {
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(
+                new Iterator<>() {
+                    ListNode current = head;
+
+                    @Override
+                    public boolean hasNext() {
+                        return current != null;
+                    }
+
+                    @Override
+                    public T next() {
+                        T data = current.data;
+                        current = current.next;
+                        return data;
+                    }
+                },
+                Spliterator.ORDERED
+        ), false);
+    }
+
+    private class ListNode {
+        private final T data;
+        private ListNode next;
+        private ListNode previous;
+
+        public ListNode(T data) {
+            this.data = data;
+            this.next = null;
+            this.previous = null;
+        }
     }
 }
