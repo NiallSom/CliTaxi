@@ -46,6 +46,7 @@ public class LinkedList<T> {
     }
 
     public T retrieve() {
+        if (isEmpty()) throw new UnsupportedOperationException("Cannot retrieve from an empty list");
         return this.current.data;
     }
 
@@ -78,6 +79,8 @@ public class LinkedList<T> {
         this.current = newNode;
     }
 
+
+    @SuppressWarnings("unused")
     public void printList() {
         ListNode temp = head;
         while (temp != null) {
