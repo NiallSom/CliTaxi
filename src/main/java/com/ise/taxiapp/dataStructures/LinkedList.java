@@ -37,8 +37,8 @@ public class LinkedList<T> {
         return size;
     }
 
-    public boolean isLast() {
-        return isEmpty() || this.current.next == null;
+    public boolean hasNext() {
+        return !isEmpty() && this.current.next != null;
     }
 
     public boolean isEmpty() {
@@ -56,7 +56,7 @@ public class LinkedList<T> {
 
     public void forEach(Consumer<T> action) {
         findFirst();
-        while (!isLast()) {
+        while (hasNext()) {
             action.accept(current.data);
             getNext();
         }
@@ -117,7 +117,7 @@ public class LinkedList<T> {
         if (isEmpty()) {
             throw new UnsupportedOperationException("Cannot remove from an empty list");
         }
-        while (!isLast()) {
+        while (hasNext()) {
             T data = retrieve();
             if (data == toRemove) {
                 remove();
