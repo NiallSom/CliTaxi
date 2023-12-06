@@ -54,6 +54,7 @@ public class LinkedListTest {
         list.remove();
         assertEquals("Two", list.retrieve());
     }
+
     @Test
     void removeOnlyElement() {
         LinkedList<String> list = new LinkedList<>();
@@ -71,7 +72,6 @@ public class LinkedListTest {
         list.remove();
         assertEquals("Two", list.retrieve());
     }
-}
 
     @Test
     void removeOne() {

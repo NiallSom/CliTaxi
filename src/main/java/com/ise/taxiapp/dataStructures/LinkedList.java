@@ -7,6 +7,12 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+/**
+ * A linked list implementation that supports basic operations such as adding, removing,
+ * retrieving, and checking for presence of elements.
+ *
+ * @param <T> the type of elements stored in the linked list
+ */
 public class LinkedList<T> {
     private ListNode head;
     private ListNode current;
@@ -16,9 +22,10 @@ public class LinkedList<T> {
         head = current = null;
         size = 0;
     }
-/**
- * Will set the pointer the next node if it exists
- */
+
+    /**
+     * Sets the pointer to the next node if it exists
+     */
     public void getNext() {
         if (this.current.next == null) {
             System.out.println("There is no next node");
@@ -26,8 +33,9 @@ public class LinkedList<T> {
         }
         this.current = this.current.next;
     }
+
     /**
-     * Will set the pointer the previous node if it exists
+     * Sets the pointer to the previous node if it exists
      */
     public void getPrevious() {
         if (this.current.previous == null) {
@@ -36,6 +44,7 @@ public class LinkedList<T> {
         }
         this.current = this.current.previous;
     }
+
     /**
      * Returns the size of the linked list
      */
@@ -43,15 +52,22 @@ public class LinkedList<T> {
         return size;
     }
 
+    /**
+     * Checks if the LinkedList has a next node
+     *
+     * @return true if there is a next node, false otherwise
+     */
     public boolean hasNext() {
         return !isEmpty() && this.current.next != null;
     }
+
     /**
-     * Will return boolean true if linked list is empty
+     * returns boolean true if linked list is empty
      */
     public boolean isEmpty() {
         return head == null;
     }
+
     /**
      * Retrieves data of the current node
      */
@@ -61,12 +77,17 @@ public class LinkedList<T> {
     }
 
     /**
-     * Will set the pointer to the head of the linked list
+     * Sets the pointer to the head of the linked list
      */
     public void findFirst() {
         current = head;
     }
 
+    /**
+     * Applies the given action to each element in the linked list.
+     *
+     * @param action the action to be applied to each element
+     */
     public void forEach(Consumer<T> action) {
         findFirst();
         while (hasNext()) {
@@ -100,7 +121,7 @@ public class LinkedList<T> {
 
 
     /**
-     * Will iterate through the list and print all data within each node
+     * Iterates through the list and print all data within each node
      */
     @SuppressWarnings("unused")
     public void printList() {
@@ -113,7 +134,8 @@ public class LinkedList<T> {
     }
 
     /**
-     * Removes the current node
+     * Removes the current node.
+     * Throws UnsupportedOperationException if the list if empty.
      */
     public void remove() {
         if (isEmpty()) {
@@ -140,6 +162,13 @@ public class LinkedList<T> {
         }
     }
 
+    /**
+     * Removes the first node with the given data, if it exists.
+     * Returns a boolean stating if the operation was successful.
+     *
+     * @param toRemove The data to remove from the list
+     * @return If the specified element was removed
+     */
     public boolean remove(T toRemove) {
         if (isEmpty()) {
             throw new UnsupportedOperationException("Cannot remove from an empty list");
@@ -160,12 +189,19 @@ public class LinkedList<T> {
     }
 
     /**
-     * Clears the linked list
+     * Clears the list.
      */
     public void clear() {
         head = current = null;
     }
 
+    /**
+     * Returns a Stream of elements from this LinkedList. The elements are retrieved from
+     * a custom Iterator implementation that iterates over the nodes of the LinkedList.
+     * The Stream is ordered.
+     *
+     * @return a Stream of elements from this LinkedList
+     */
     public Stream<T> stream() {
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(
                 new Iterator<>() {
@@ -187,11 +223,21 @@ public class LinkedList<T> {
         ), false);
     }
 
+
+    /**
+     * Checks if the LinkedList contains the specified data.
+     *
+     * @param data the data to search for
+     * @return {@code true} if the LinkedList contains the data, {@code false} otherwise
+     */
     public boolean contains(T data) {
         return this.stream().anyMatch(item -> item.equals(data));
     }
 
 
+    /**
+     * Represents a node in a linked list.
+     */
     private class ListNode {
         private final T data;
         private ListNode next;
