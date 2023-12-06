@@ -108,7 +108,7 @@ public class CliDriver {
         System.out.printf("""
                 Taxi found!
                 Driver %s is on the way.
-                He should arrive in %d minutes""", taxi.getDriver(), taxi.timeToDestination());
+                He should arrive in %d minutes%n""", taxi.getDriver(), taxi.timeToDestination());
         Thread.sleep(taxi.timeToDestination() * 1000);
         taxi.driveToDestination();
 
@@ -118,7 +118,7 @@ public class CliDriver {
         clearScreen();
         System.out.printf("""
                 Driving to your destination: %s
-                We should be there in %d mins""", destination, taxi.timeToDestination());
+                We should be there in %d mins%n""", destination, taxi.timeToDestination());
         Thread.sleep(taxi.timeToDestination() * 1000);
         taxi.driveToDestination();
 
@@ -128,7 +128,7 @@ public class CliDriver {
                 We have arrived!
                 Total charge: %.2f.
                 This has been charged to your account.
-                New account balance: %s.""", charge, user.getBalance());
+                New account balance: %s.%n""", charge, user.getBalance());
 
         int rating = promptInput("How would you rate your ride 0-5?", 5, scanner);
         taxi.getDriver().rate(rating);
