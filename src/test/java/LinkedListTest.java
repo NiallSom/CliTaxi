@@ -1,20 +1,55 @@
 import com.ise.taxiapp.dataStructures.LinkedList;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class LinkedListTest {
-    public static void main(String[] args) {
+
+    @Test
+    void testList() {
         LinkedList<String> list = new LinkedList<>();
-        list.insert("Pizza1");
-        list.insert("Pizza2");
-        list.insert("Pizza3");
-        list.insert("Pizza4");
-        list.insert("Pizza5");
-        list.insert("Pizza6");
-        list.insert("Pizza7");
+        assertTrue(list.isEmpty());
+        list.add("One");
+        assertEquals(1, list.size());
+        assertEquals("One", list.retrieve());
+        list.add("Two");
+        assertEquals("Two", list.retrieve());
+        list.add("Three");
+        list.getPrevious();
+        assertEquals("Two", list.retrieve());
         list.remove();
-        list.printList();
-        System.out.println(list.retrieve());
-        list.getPrevious();
-        list.getPrevious();
-        System.out.println(list.retrieve());
+        assertEquals(2, list.size());
+        assertEquals("Three", list.retrieve());
+        list.findFirst();
+        assertEquals("One", list.retrieve());
+
+        // Streams
+        assertEquals(2, list.stream().count());
+        // ForEach
+        var ref = new Object() {
+            int count = 0;
+        };
+        list.forEach(s -> ref.count++);
+        assertEquals(2, ref.count);
+
+        list.findFirst();
+        list.remove();
+        assertEquals(1, list.size());
+        assertEquals("Three", list.retrieve());
+        // Clearing
+        list.clear();
+        assertTrue(list.isEmpty());
+    }
+
+    @Test
+    void simple() {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("One");
+        list.add("Two");
+        list.findFirst();
+        list.remove();
+        assertEquals("Two", list.retrieve());
     }
 }
