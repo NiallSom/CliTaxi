@@ -16,7 +16,9 @@ public class LinkedList<T> {
         head = current = null;
         size = 0;
     }
-
+/**
+ * Will set the pointer the next node if it exists
+ */
     public void getNext() {
         if (this.current.next == null) {
             System.out.println("There is no next node");
@@ -24,7 +26,9 @@ public class LinkedList<T> {
         }
         this.current = this.current.next;
     }
-
+    /**
+     * Will set the pointer the previous node if it exists
+     */
     public void getPrevious() {
         if (this.current.previous == null) {
             System.out.println("There is no previous node");
@@ -32,23 +36,34 @@ public class LinkedList<T> {
         }
         this.current = this.current.previous;
     }
-
+    /**
+     * Returns the size of the linked list
+     */
     public int size() {
         return size;
     }
-
+    /**
+     * Will return boolean true if the current pointer is on the last node
+     */
     public boolean isLast() {
         return isEmpty() || this.current.next == null;
     }
-
+    /**
+     * Will return boolean true if linked list is empty
+     */
     public boolean isEmpty() {
         return head == null;
     }
-
+    /**
+     * Retrieves data of the current node
+     */
     public T retrieve() {
         return this.current.data;
     }
 
+    /**
+     * Will set the pointer to the head of the linked list
+     */
     public void findFirst() {
         current = head;
     }
@@ -62,6 +77,12 @@ public class LinkedList<T> {
         action.accept(current.data);
     }
 
+    /**
+     * Inserts a new node containing the specified data after the current pointer.
+     * This method advances the pointer to the newly added node.
+     *
+     * @param data the data to be set in the new node
+     */
     public void add(T data) {
         ListNode newNode = new ListNode(data);
         size++;
@@ -78,6 +99,9 @@ public class LinkedList<T> {
         this.current = newNode;
     }
 
+    /**
+     * Will iterate through the list and print all data within each node
+     */
     public void printList() {
         ListNode temp = head;
         while (temp != null) {
@@ -87,6 +111,9 @@ public class LinkedList<T> {
         System.out.println();
     }
 
+    /**
+     * Removes the current node
+     */
     public void remove() {
         if (isEmpty()) {
             throw new UnsupportedOperationException("Cannot remove from an empty list");
@@ -109,7 +136,9 @@ public class LinkedList<T> {
             this.current = this.current.previous;
         }
     }
-
+    /**
+     * Clears the linked list
+     */
     public void clear() {
         head = current = null;
     }
