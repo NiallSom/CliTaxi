@@ -1,14 +1,13 @@
 package com.ise.taxiapp.nav;
 
+import com.ise.taxiapp.dataStructures.LinkedList;
 import com.ise.taxiapp.entities.Fare;
 import com.ise.taxiapp.entities.Taxi;
 
 import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
 
 public class Region {
-    protected List<Taxi> taxiList;
+    protected LinkedList<Taxi> taxiList;
 
     Region() {
         taxiList = new LinkedList<>();
