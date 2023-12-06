@@ -38,4 +38,8 @@ public class Driver {
     public void setContactDetails(String[] contactDetails) {
         this.contactDetails = contactDetails;
     }
+
+    public String toString() {
+        return name;
+    }
 }
