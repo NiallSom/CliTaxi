@@ -103,6 +103,9 @@ public class LinkedList<T> {
      * Will iterate through the list and print all data within each node
      */
     @SuppressWarnings("unused")
+    /**
+     * Will iterate through the list and print all data within each node
+     */
     public void printList() {
         ListNode temp = head;
         while (temp != null) {
