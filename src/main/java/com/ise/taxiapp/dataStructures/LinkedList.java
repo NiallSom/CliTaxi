@@ -42,11 +42,9 @@ public class LinkedList<T> {
     public int size() {
         return size;
     }
-    /**
-     * Will return boolean true if the current pointer is on the last node
-     */
-    public boolean isLast() {
-        return isEmpty() || this.current.next == null;
+
+    public boolean hasNext() {
+        return !isEmpty() && this.current.next != null;
     }
     /**
      * Will return boolean true if linked list is empty
@@ -71,7 +69,7 @@ public class LinkedList<T> {
 
     public void forEach(Consumer<T> action) {
         findFirst();
-        while (!isLast()) {
+        while (hasNext()) {
             action.accept(current.data);
             getNext();
         }
@@ -144,7 +142,7 @@ public class LinkedList<T> {
         if (isEmpty()) {
             throw new UnsupportedOperationException("Cannot remove from an empty list");
         }
-        while (!isLast()) {
+        while (hasNext()) {
             T data = retrieve();
             if (data == toRemove) {
                 remove();
