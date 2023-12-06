@@ -64,6 +64,7 @@ public class LinkedListTest {
         list.remove();
         assertEquals("Two", list.retrieve());
     }
+}
 
     @Test
     void removeOne() {
