@@ -58,6 +58,7 @@ public class LinkedList<T> {
      * Retrieves data of the current node
      */
     public T retrieve() {
+        if (isEmpty()) throw new UnsupportedOperationException("Cannot retrieve from an empty list");
         return this.current.data;
     }
 
@@ -99,9 +100,11 @@ public class LinkedList<T> {
         this.current = newNode;
     }
 
+
     /**
      * Will iterate through the list and print all data within each node
      */
+    @SuppressWarnings("unused")
     public void printList() {
         ListNode temp = head;
         while (temp != null) {

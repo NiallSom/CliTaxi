@@ -1,8 +1,7 @@
 import com.ise.taxiapp.dataStructures.LinkedList;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class LinkedListTest {
@@ -18,10 +17,8 @@ public class LinkedListTest {
         assertEquals("Two", list.retrieve());
         list.add("Three");
         list.getPrevious();
-        System.out.println(list.retrieve());
         assertEquals("Two", list.retrieve());
         list.remove();
-        list.printList();
         assertEquals(2, list.size());
         assertEquals("Three", list.retrieve());
         list.findFirst();
@@ -29,6 +26,7 @@ public class LinkedListTest {
 
         // Streams
         assertEquals(2, list.stream().count());
+
         // ForEach
         var ref = new Object() {
             int count = 0;
@@ -37,9 +35,7 @@ public class LinkedListTest {
         assertEquals(2, ref.count);
         list.findFirst();
         list.remove();
-        list.printList();
         assertEquals(1, list.size());
-        System.out.println(list.retrieve());
         assertEquals("Three", list.retrieve());
         // Clearing
         list.clear();
@@ -47,11 +43,21 @@ public class LinkedListTest {
     }
 
     @Test
-    void simple() {
+    void removeFirst() {
         LinkedList<String> list = new LinkedList<>();
         list.add("One");
         list.add("Two");
         list.findFirst();
+        list.remove();
+        assertEquals("Two", list.retrieve());
+    }
+
+    @Test
+    void removeLast() {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("One");
+        list.add("Two");
+        list.add("Three");
         list.remove();
         assertEquals("Two", list.retrieve());
     }
