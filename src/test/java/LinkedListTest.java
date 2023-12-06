@@ -18,8 +18,10 @@ public class LinkedListTest {
         assertEquals("Two", list.retrieve());
         list.add("Three");
         list.getPrevious();
+        System.out.println(list.retrieve());
         assertEquals("Two", list.retrieve());
         list.remove();
+        list.printList();
         assertEquals(2, list.size());
         assertEquals("Three", list.retrieve());
         list.findFirst();
@@ -33,10 +35,11 @@ public class LinkedListTest {
         };
         list.forEach(s -> ref.count++);
         assertEquals(2, ref.count);
-
         list.findFirst();
         list.remove();
+        list.printList();
         assertEquals(1, list.size());
+        System.out.println(list.retrieve());
         assertEquals("Three", list.retrieve());
         // Clearing
         list.clear();
