@@ -59,6 +59,7 @@ public class LinkedListTest {
         LinkedList<String> list = new LinkedList<>();
         list.add("One");
         list.remove();
+
     }
 
     @Test
