@@ -64,4 +64,11 @@ public class LinkedListTest {
         list.remove();
         assertEquals("Two", list.retrieve());
     }
+
+    @Test
+    void removeOne() {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("One");
+        list.remove();
+    }
 }
