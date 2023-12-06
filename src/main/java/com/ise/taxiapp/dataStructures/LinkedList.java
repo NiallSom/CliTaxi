@@ -139,6 +139,26 @@ public class LinkedList<T> {
             this.current = this.current.previous;
         }
     }
+
+    public boolean remove(T toRemove) {
+        if (isEmpty()) {
+            throw new UnsupportedOperationException("Cannot remove from an empty list");
+        }
+        while (!isLast()) {
+            T data = retrieve();
+            if (data == toRemove) {
+                remove();
+                return true;
+            }
+        }
+        T data = retrieve();
+        if (data == toRemove) {
+            remove();
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Clears the linked list
      */
@@ -166,6 +186,11 @@ public class LinkedList<T> {
                 Spliterator.ORDERED
         ), false);
     }
+
+    public boolean contains(T data) {
+        return this.stream().anyMatch(item -> item.equals(data));
+    }
+
 
     private class ListNode {
         private final T data;
