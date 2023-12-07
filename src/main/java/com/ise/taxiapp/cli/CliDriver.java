@@ -9,6 +9,9 @@ import com.ise.taxiapp.nav.Location;
 import com.ise.taxiapp.nav.Point;
 import com.ise.taxiapp.nav.Region;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
 
 import static com.ise.taxiapp.cli.Util.*;
@@ -18,14 +21,15 @@ public class CliDriver {
     private Scanner scanner;
     private Region region;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         new CliDriver().run();
     }
 
     /**
      * Inits the region and user, and runs the program loop
      */
-    public void run() throws InterruptedException {
+    public void run() throws InterruptedException, IOException {
+
         scanner = new Scanner(System.in);
         clearScreen();
         System.out.println("Welcome to taxi app!");
@@ -34,10 +38,7 @@ public class CliDriver {
         user = new User(username);
         user.setCurrentLocation(new Point(5, 5));
         region = initRegion();
-        Taxi taxi = new Taxi("123", new Driver("John", "456"), Fare.STANDARD_FARE);
-        taxi.setLocation(new Point(0, 0));
-        region.insertTaxi(taxi);
-
+        populateRegionWithTaxis();
         String continuePrompt = """
                 Would you like to book a taxi?
                 (0) No
@@ -82,6 +83,20 @@ public class CliDriver {
             case 2 -> Fare.EXTRA_LARGE_FARE;
             default -> null; // unreachable, promptInput only allows valid inputs
         };
+    }
+
+    /**
+     * This method will populate the taxis in region linked list with random taxi data stored in taxiData.csv
+     */
+    public void populateRegionWithTaxis() throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new FileReader("src/main/java/com/ise/taxiapp/taxiData.csv"));
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            String[] lines = line.split(",");
+            Taxi taxi = new Taxi(lines[1], new Driver(lines[0], lines[2]), Fare.valueOf(lines[4]));
+            taxi.setLocation(new Point(0, 0));
+            region.insertTaxi(taxi);
+        }
     }
 
     /**
@@ -130,7 +145,7 @@ public class CliDriver {
                 This has been charged to your account.
                 New account balance: %s.%n""", charge, user.getBalance());
 
-        int rating = promptInput("How would you rate your ride 0-5?", 5, scanner);
+        int rating = promptInput("How would you rate your ride 0-5?", 5, scanner); // feel as if this should be in another method
         taxi.getDriver().rate(rating);
         taxi.markAsAvailable();
     }
