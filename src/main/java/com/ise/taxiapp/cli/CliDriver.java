@@ -10,7 +10,6 @@ import com.ise.taxiapp.nav.Point;
 import com.ise.taxiapp.nav.Region;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
@@ -40,10 +39,6 @@ public class CliDriver {
         user.setCurrentLocation(new Point(5, 5));
         region = initRegion();
         populateRegionWithTaxis();
-//        Taxi taxi = new Taxi("123", new Driver("John", "456"), Fare.STANDARD_FARE);
-//        taxi.setLocation(new Point(0, 0));
-//        region.insertTaxi(taxi);
-
         String continuePrompt = """
                 Would you like to book a taxi?
                 (0) No
@@ -92,21 +87,14 @@ public class CliDriver {
 
     /**
      * This method will populate the taxis in region linked list with random taxi data stored in taxiData.csv
-     * @throws IOException
      */
     public void populateRegionWithTaxis() throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader("src/main/java/com/ise/taxiapp/taxiData.csv"));
-        String line = "";
+        String line;
         while ((line = bufferedReader.readLine()) != null) {
             String[] lines = line.split(",");
-            Fare type = null;
-            switch (lines[4]){
-                case "STANDARD" -> type = Fare.STANDARD_FARE;
-                case "EXPRESS" -> type = Fare.EXPRESS_FARE;
-                case "EXTRA_LARGE" -> type = Fare.EXTRA_LARGE_FARE;
-            }
-            Taxi taxi = new Taxi(lines[1], new Driver(lines[0], lines[2]),type);
-            taxi.setLocation(new Point(0,0));
+            Taxi taxi = new Taxi(lines[1], new Driver(lines[0], lines[2]), Fare.valueOf(lines[4]));
+            taxi.setLocation(new Point(0, 0));
             region.insertTaxi(taxi);
         }
     }
