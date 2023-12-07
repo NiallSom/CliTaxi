@@ -1,4 +1,6 @@
-package com.ise.taxiapp.nav;
+package com.ise.taxiapp.nav.grid;
+
+import com.ise.taxiapp.nav.Region;
 
 public class Grid extends Region {
 
