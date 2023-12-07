@@ -13,7 +13,7 @@ import java.util.stream.StreamSupport;
  *
  * @param <T> the type of elements stored in the linked list
  */
-public class LinkedList<T> {
+public class LinkedList<T> implements List<T> {
     private ListNode head;
     private ListNode current;
     private int size;
@@ -71,7 +71,7 @@ public class LinkedList<T> {
     /**
      * Retrieves data of the current node
      */
-    public T retrieve() {
+    public T get() {
         if (isEmpty()) throw new UnsupportedOperationException("Cannot retrieve from an empty list");
         return this.current.data;
     }
@@ -174,13 +174,13 @@ public class LinkedList<T> {
             throw new UnsupportedOperationException("Cannot remove from an empty list");
         }
         while (hasNext()) {
-            T data = retrieve();
+            T data = get();
             if (data == toRemove) {
                 remove();
                 return true;
             }
         }
-        T data = retrieve();
+        T data = get();
         if (data == toRemove) {
             remove();
             return true;

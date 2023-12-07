@@ -12,17 +12,17 @@ public class LinkedListTest {
         assertTrue(list.isEmpty());
         list.add("One");
         assertEquals(1, list.size());
-        assertEquals("One", list.retrieve());
+        assertEquals("One", list.get());
         list.add("Two");
-        assertEquals("Two", list.retrieve());
+        assertEquals("Two", list.get());
         list.add("Three");
         list.getPrevious();
-        assertEquals("Two", list.retrieve());
+        assertEquals("Two", list.get());
         list.remove();
         assertEquals(2, list.size());
-        assertEquals("Three", list.retrieve());
+        assertEquals("Three", list.get());
         list.findFirst();
-        assertEquals("One", list.retrieve());
+        assertEquals("One", list.get());
 
         // Streams
         assertEquals(2, list.stream().count());
@@ -37,11 +37,11 @@ public class LinkedListTest {
         list.findFirst();
         list.remove();
         assertEquals(1, list.size());
-        assertEquals("Three", list.retrieve());
+        assertEquals("Three", list.get());
         // Clearing
         list.clear();
         assertTrue(list.isEmpty());
-        assertThrows(UnsupportedOperationException.class, list::retrieve);
+        assertThrows(UnsupportedOperationException.class, list::get);
         assertThrows(UnsupportedOperationException.class, list::remove);
     }
 
@@ -52,7 +52,7 @@ public class LinkedListTest {
         list.add("Two");
         list.findFirst();
         list.remove();
-        assertEquals("Two", list.retrieve());
+        assertEquals("Two", list.get());
     }
 
     @Test
@@ -70,7 +70,7 @@ public class LinkedListTest {
         list.add("Two");
         list.add("Three");
         list.remove();
-        assertEquals("Two", list.retrieve());
+        assertEquals("Two", list.get());
     }
 
     @Test
