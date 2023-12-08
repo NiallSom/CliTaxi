@@ -10,7 +10,7 @@ public interface List<T> {
 
     T get();
 
-    void forEach(Consumer<T> action);
+//    void forEach(Consumer<T> action);
 
     void remove();
 
