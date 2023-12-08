@@ -4,10 +4,10 @@ import com.ise.taxiapp.entities.Driver;
 import com.ise.taxiapp.entities.Fare;
 import com.ise.taxiapp.entities.Taxi;
 import com.ise.taxiapp.entities.User;
-import com.ise.taxiapp.nav.Grid;
 import com.ise.taxiapp.nav.Location;
-import com.ise.taxiapp.nav.Point;
 import com.ise.taxiapp.nav.Region;
+import com.ise.taxiapp.nav.Grid;
+import com.ise.taxiapp.nav.Point;
 
 import java.util.Scanner;
 

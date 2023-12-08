@@ -6,10 +6,10 @@ import com.ise.taxiapp.entities.Taxi;
 
 import java.util.Comparator;
 
-public class Region {
+public abstract class Region {
     protected LinkedList<Taxi> taxiList;
 
-    Region() {
+    protected Region() {
         taxiList = new LinkedList<>();
     }
 
