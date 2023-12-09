@@ -8,7 +8,6 @@ import com.ise.taxiapp.nav.Grid;
 import com.ise.taxiapp.nav.Location;
 import com.ise.taxiapp.nav.Point;
 import com.ise.taxiapp.nav.Region;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -94,7 +93,11 @@ public class CliDriver {
         while ((line = bufferedReader.readLine()) != null) {
             String[] lines = line.split(",");
             Taxi taxi = new Taxi(lines[1], new Driver(lines[0], lines[2]), Fare.valueOf(lines[4]));
-            taxi.setLocation(new Point(0, 0));
+            taxi.setLocation(
+                    Point.fromIndex(
+                            Integer.parseInt(lines[5]),
+                            ((Grid) region).getWidth())
+            );
             region.insertTaxi(taxi);
         }
     }
@@ -111,10 +114,11 @@ public class CliDriver {
         clearScreen();
         Taxi taxi;
         // Keep looping until a taxi is available within 10km of the user
-        int radius = 10;
+        int radius = 10; // keep at 1 or a low number, increment by 1 if not found - implement in different branch
         while ((taxi = region.callTaxi(user.getCurrentLocation(), fare, radius)) == null) {
             System.out.println("Searching for a taxi...");
             //noinspection BusyWait
+            // Add user to the queue - observer design pattern implementation
             Thread.sleep(3000);
         }
 
