@@ -4,12 +4,10 @@ import com.ise.taxiapp.dataStructures.LinkedList;
 import com.ise.taxiapp.entities.Fare;
 import com.ise.taxiapp.entities.Taxi;
 
-import java.util.Comparator;
-
-public class Region {
+public abstract class Region {
     protected LinkedList<Taxi> taxiList;
 
-    Region() {
+    protected Region() {
         taxiList = new LinkedList<>();
     }
 
@@ -44,20 +42,12 @@ public class Region {
 
     /**
      * Finds the nearest taxi to the given location for the given fare.
-     * Returns null if no taxis are available in the given radius.
+     * If no taxi is currently available, this will place the user in a queue.
      *
      * @param location The location where the taxi must travel to
      * @param fare     The fare to filter by when finding a taxi
      * @param radiusKm The radius around the location where a taxi is marked as valid.
      * @return The nearest taxi to the location, or null if no taxi is available
      */
-    public Taxi callTaxi(Location location, Fare fare, int radiusKm) {
-        return taxiList
-                .stream()
-                .filter(taxi -> taxi.getLocation().distanceTo(location) <= radiusKm)
-                .filter(Taxi::isAvailable)
-                .filter(taxi -> taxi.getFare().equals(fare))
-                .min(Comparator.comparing(taxi -> taxi.getLocation().distanceTo(location)))
-                .orElse(null);
-    }
+    public abstract Taxi callTaxi(Location location, Fare fare, int radiusKm);
 }

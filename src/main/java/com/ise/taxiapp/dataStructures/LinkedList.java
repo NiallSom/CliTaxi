@@ -1,6 +1,7 @@
 package com.ise.taxiapp.dataStructures;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
@@ -13,7 +14,7 @@ import java.util.stream.StreamSupport;
  *
  * @param <T> the type of elements stored in the linked list
  */
-public class LinkedList<T> {
+public class LinkedList<T> implements List<T>, Iterable<T> {
     private ListNode head;
     private ListNode current;
     private int size;
@@ -71,7 +72,7 @@ public class LinkedList<T> {
     /**
      * Retrieves data of the current node
      */
-    public T retrieve() {
+    public T get() {
         if (isEmpty()) throw new UnsupportedOperationException("Cannot retrieve from an empty list");
         return this.current.data;
     }
@@ -88,7 +89,7 @@ public class LinkedList<T> {
      *
      * @param action the action to be applied to each element
      */
-    public void forEach(Consumer<T> action) {
+    public void forEach(Consumer<? super T> action) {
         findFirst();
         while (hasNext()) {
             action.accept(current.data);
@@ -119,23 +120,9 @@ public class LinkedList<T> {
         this.current = newNode;
     }
 
-
-    /**
-     * Iterates through the list and print all data within each node
-     */
-    @SuppressWarnings("unused")
-    public void printList() {
-        ListNode temp = head;
-        while (temp != null) {
-            System.out.print(temp.data + " -> ");
-            temp = temp.next;
-        }
-        System.out.println();
-    }
-
     /**
      * Removes the current node.
-     * Throws UnsupportedOperationException if the list if empty.
+     * Throws UnsupportedOperationException if the list is empty.
      */
     public void remove() {
         if (isEmpty()) {
@@ -174,13 +161,13 @@ public class LinkedList<T> {
             throw new UnsupportedOperationException("Cannot remove from an empty list");
         }
         while (hasNext()) {
-            T data = retrieve();
+            T data = get();
             if (data == toRemove) {
                 remove();
                 return true;
             }
         }
-        T data = retrieve();
+        T data = get();
         if (data == toRemove) {
             remove();
             return true;
@@ -204,25 +191,20 @@ public class LinkedList<T> {
      */
     public Stream<T> stream() {
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(
-                new Iterator<>() {
-                    ListNode current = head;
-
-                    @Override
-                    public boolean hasNext() {
-                        return current != null;
-                    }
-
-                    @Override
-                    public T next() {
-                        T data = current.data;
-                        current = current.next;
-                        return data;
-                    }
-                },
+                iterator(),
                 Spliterator.ORDERED
         ), false);
     }
 
+    @Override
+    public String toString() {
+        if (isEmpty()) return "[]";
+        StringBuilder sb = new StringBuilder("[");
+        forEach(data -> sb.append(data).append(", "));
+        sb.deleteCharAt(sb.length() - 3);  // remove trailing ", "
+        sb.append("]");
+        return sb.toString();
+    }
 
     /**
      * Checks if the LinkedList contains the specified data.
@@ -232,6 +214,29 @@ public class LinkedList<T> {
      */
     public boolean contains(T data) {
         return this.stream().anyMatch(item -> item.equals(data));
+    }
+
+    @SuppressWarnings("NullableProblems")
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<>() {
+            ListNode current = head;
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public T next() {
+                if (current == null) {
+                    throw new NoSuchElementException();
+                }
+                T data = current.data;
+                current = current.next;
+                return data;
+            }
+        };
     }
 
 
@@ -249,5 +254,4 @@ public class LinkedList<T> {
             this.previous = null;
         }
     }
-
 }
