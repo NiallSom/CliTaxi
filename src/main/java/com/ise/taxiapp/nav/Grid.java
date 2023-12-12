@@ -1,6 +1,8 @@
 package com.ise.taxiapp.nav;
 
 import com.ise.taxiapp.dataStructures.LinkedList;
+import com.ise.taxiapp.entities.Fare;
+import com.ise.taxiapp.entities.Taxi;
 
 import java.util.function.Predicate;
 
@@ -95,15 +97,15 @@ public class Grid extends Region {
             visited.add(current);
             queue.remove();
             for (Point neighbour : neighboursOf(current)) {
+                if (visited.contains(neighbour)) continue;
                 if (origin.distanceTo(neighbour) > radius) continue;
-                if (!visited.contains(neighbour)) {
-                    for (Object item : neighbour.getObjects()) {
-                        if (predicate.test(item)) return item;
-                    }
-                    queue.add(neighbour);
+                for (Object item : neighbour.getObjects()) {
+                    if (predicate.test(item)) return item;
                 }
+                queue.add(neighbour);
             }
         }
+        // If no such object is found within the radius
         return null;
     }
 
@@ -123,5 +125,11 @@ public class Grid extends Region {
         if (y > 0) list.add(get(x, y - 1));
         if (y < height - 1) list.add(get(x, y + 1));
         return list;
+    }
+
+    @Override
+    public Taxi callTaxi(Location location, Fare fare, int radiusKm) {
+        // Todo implement scheduler
+        return null;
     }
 }
