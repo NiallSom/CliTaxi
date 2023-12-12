@@ -20,6 +20,9 @@ public class CliDriver {
     private User user;
     private Scanner scanner;
     private Region region;
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String RESET ="\033[0m";
 
     public static void main(String[] args) throws InterruptedException, IOException {
         new CliDriver().run();
@@ -38,12 +41,14 @@ public class CliDriver {
         user = new User(username);
         user.setCurrentLocation(new Point(5, 5));
         region = initRegion();
+
         populateRegionWithTaxis();
         String continuePrompt = """
                 Would you like to book a taxi?
                 (0) No
                 (1) Yes""";
         // Loop until the user no longer wishes to book a taxi
+        printMap();
         while (promptInput(continuePrompt, 1, scanner) == 1) {
             Location destination = chooseDestination();
             Fare fare = chooseFare();
@@ -98,7 +103,48 @@ public class CliDriver {
             region.insertTaxi(taxi);
         }
     }
+    public void printMap() {
+        Point currLoc = ((Point)user.getCurrentLocation());
+        int currX = currLoc.x();
+        int currY = currLoc.y();
+        String box = "\u2610 ";
+        String locationBox = "\u2612 ";
+        for (int j=0;j<((Grid)region).getHeight();j++) {
+            for (int i = 0; i < ((Grid) region).getWidth(); i++) {
 
+                if(j == currX && i == currY) {
+                    System.out.print(ANSI_GREEN+locationBox+RESET);
+                } else {
+                    System.out.print(box);
+                }
+            }
+            System.out.println();
+        }
+    }
+    public void printMap(Location location) {
+        Point currLoc = ((Point)user.getCurrentLocation());
+        Point destination = ((Point)location);
+        int currX = currLoc.x();
+        int currY = currLoc.y();
+        int destX = destination.x();
+        int destY = destination.y();
+        String box = "\u2610 ";
+        String locationBox = "\u2612 ";
+        for (int j=0;j<((Grid)region).getHeight();j++) {
+            for (int i = 0; i < ((Grid) region).getWidth(); i++) {
+
+                if(j == currX && i == currY) {
+                    System.out.print(ANSI_GREEN+locationBox+RESET);
+                }
+                else if(j == destX && i == destY) {
+                    System.out.print(ANSI_RED+locationBox+RESET);
+                }else {
+                    System.out.print(box);
+                }
+            }
+            System.out.println();
+        }
+    }
     /**
      * Calls a taxi.
      * Once the taxi arrives, it will take the user to their chosen destination
@@ -110,6 +156,7 @@ public class CliDriver {
     public void callTaxi(Location destination, Fare fare) throws InterruptedException {
         clearScreen();
         Taxi taxi;
+        printMap(destination);
         // Keep looping until a taxi is available within 10km of the user
         int radius = 10;
         while ((taxi = region.callTaxi(user.getCurrentLocation(), fare, radius)) == null) {
