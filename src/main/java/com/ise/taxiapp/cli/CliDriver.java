@@ -8,7 +8,9 @@ import com.ise.taxiapp.nav.Location;
 import com.ise.taxiapp.nav.Region;
 import com.ise.taxiapp.nav.Grid;
 import com.ise.taxiapp.nav.Point;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
 
 import static com.ise.taxiapp.cli.Util.*;
@@ -18,14 +20,15 @@ public class CliDriver {
     private Scanner scanner;
     private Region region;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         new CliDriver().run();
     }
 
     /**
      * Inits the region and user, and runs the program loop
      */
-    public void run() throws InterruptedException {
+    public void run() throws InterruptedException, IOException {
+
         scanner = new Scanner(System.in);
         clearScreen();
         System.out.println("Welcome to taxi app!");
@@ -34,10 +37,7 @@ public class CliDriver {
         user = new User(username);
         user.setCurrentLocation(new Point(5, 5));
         region = initRegion();
-        Taxi taxi = new Taxi("123", new Driver("John", "456"), Fare.STANDARD_FARE);
-        taxi.setLocation(new Point(0, 0));
-        region.insertTaxi(taxi);
-
+        populateRegionWithTaxis();
         String continuePrompt = """
                 Would you like to book a taxi?
                 (0) No
@@ -85,6 +85,24 @@ public class CliDriver {
     }
 
     /**
+     * This method will populate the taxis in region linked list with random taxi data stored in taxiData.csv
+     */
+    public void populateRegionWithTaxis() throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new FileReader("src/main/java/com/ise/taxiapp/taxiData.csv"));
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            String[] lines = line.split(",");
+            Taxi taxi = new Taxi(lines[1], new Driver(lines[0], lines[2]), Fare.valueOf(lines[4]));
+            taxi.setLocation(
+                    Point.fromIndex(
+                            Integer.parseInt(lines[5]),
+                            ((Grid) region).getWidth())
+            );
+            region.insertTaxi(taxi);
+        }
+    }
+
+    /**
      * Calls a taxi.
      * Once the taxi arrives, it will take the user to their chosen destination
      * and charge their bank account.
@@ -96,10 +114,11 @@ public class CliDriver {
         clearScreen();
         Taxi taxi;
         // Keep looping until a taxi is available within 10km of the user
-        int radius = 10;
+        int radius = 10; // keep at 1 or a low number, increment by 1 if not found - implement in different branch
         while ((taxi = region.callTaxi(user.getCurrentLocation(), fare, radius)) == null) {
             System.out.println("Searching for a taxi...");
             //noinspection BusyWait
+            // Add user to the queue - observer design pattern implementation
             Thread.sleep(3000);
         }
 
@@ -130,7 +149,7 @@ public class CliDriver {
                 This has been charged to your account.
                 New account balance: %s.%n""", charge, user.getBalance());
 
-        int rating = promptInput("How would you rate your ride 0-5?", 5, scanner);
+        int rating = promptInput("How would you rate your ride 0-5?", 5, scanner); // feel as if this should be in another method
         taxi.getDriver().rate(rating);
         taxi.markAsAvailable();
     }
