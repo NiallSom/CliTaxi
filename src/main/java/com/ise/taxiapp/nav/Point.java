@@ -96,7 +96,6 @@ public class Point implements Location {
 
     /**
      * Returns a string representation of this Point object in the format "Point(x, y)".
-     * This method overrides the toString method from the Object class.
      *
      * @return The string representation of this Point object.
      */
