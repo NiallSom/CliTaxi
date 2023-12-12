@@ -120,23 +120,9 @@ public class LinkedList<T> implements List<T>, Iterable<T> {
         this.current = newNode;
     }
 
-
-    /**
-     * Iterates through the list and print all data within each node
-     */
-    @SuppressWarnings("unused")
-    public void printList() {
-        ListNode temp = head;
-        while (temp != null) {
-            System.out.print(temp.data + " -> ");
-            temp = temp.next;
-        }
-        System.out.println();
-    }
-
     /**
      * Removes the current node.
-     * Throws UnsupportedOperationException if the list if empty.
+     * Throws UnsupportedOperationException if the list is empty.
      */
     public void remove() {
         if (isEmpty()) {
@@ -230,6 +216,7 @@ public class LinkedList<T> implements List<T>, Iterable<T> {
         return this.stream().anyMatch(item -> item.equals(data));
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public Iterator<T> iterator() {
         return new Iterator<>() {
