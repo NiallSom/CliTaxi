@@ -12,6 +12,7 @@ import com.ise.taxiapp.nav.Region;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Random;
 import java.util.Scanner;
 
 import static com.ise.taxiapp.cli.Util.*;
@@ -185,18 +186,43 @@ public class CliDriver {
         taxi.driveToDestination();
 
         double charge = taxi.calculateCharge();
-        user.charge(charge);
-        displayText("""
-                We have arrived!
-                Total charge: %.2f.
-                This has been charged to your account.
-                New account balance: %s.%n""", charge, user.getBalance());
+        optionToRun(charge);
+
 
         int rating = promptInput("How would you rate your ride 0-5?", 5, scanner); // feel as if this should be in another method
         taxi.getDriver().rate(rating);
         taxi.markAsAvailable();
     }
+    public void optionToRun(double charge) {
+        int choice = promptInput("""
+                Would you like to run away (10% chance)
+                (1) Yes
+                (0) No""", 1, scanner);
+        if (choice == 1) {
+            double random = Math.random();
+            System.out.println("Opening the door....");
+            System.out.println("Running...");
+            if (random < 0.10){
+                System.out.println("You got away!");
+            }else {
+                System.out.println("You tripped over the curb, you have been caught");
+                user.charge(charge*2);
+                displayText("""
+                We have arrived!
+                Total charge: %.2f.
+                This has been charged to your account.
+                New account balance: %s.%n""", charge, user.getBalance());
+            }
+        }else {
+            user.charge(charge);
+            displayText("""
+                We have arrived!
+                Total charge: %.2f.
+                This has been charged to your account.
+                New account balance: %s.%n""", charge, user.getBalance());
+        }
 
+    }
     public Region initRegion() {
         return new Grid(10, 10);
     }
