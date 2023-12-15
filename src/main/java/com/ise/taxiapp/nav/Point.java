@@ -1,6 +1,7 @@
 package com.ise.taxiapp.nav;
 
 import com.ise.taxiapp.dataStructures.LinkedList;
+import com.ise.taxiapp.entities.Locatable;
 
 import java.util.function.Predicate;
 
@@ -15,7 +16,7 @@ public class Point implements Location {
     /**
      * List of items at the current point in space.
      */
-    LinkedList<Object> objects;
+    LinkedList<Locatable> objects;
 
     /**
      * Constructs a Point at the specified (x, y) location.
@@ -46,7 +47,7 @@ public class Point implements Location {
      *
      * @return The LinkedList of objects associated with the Point.
      */
-    public LinkedList<Object> getObjects() {
+    public LinkedList<Locatable> getObjects() {
         return objects;
     }
 
@@ -74,7 +75,7 @@ public class Point implements Location {
      * @param p The Predicate used for testing each object.
      * @return The first object that matches, or null if no match is found.
      */
-    public Object findMatch(Predicate<Object> p) {
+    public Object findMatch(Predicate<Locatable> p) {
         return objects.stream().filter(p).findAny().orElse(null);
     }
 

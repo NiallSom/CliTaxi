@@ -11,6 +11,10 @@ public abstract class Region {
         taxiList = new LinkedList<>();
     }
 
+    public LinkedList<Taxi> getTaxiList() {
+        return taxiList;
+    }
+
     public boolean insertTaxi(Taxi taxi) {
         if (taxiList.contains(taxi)) {
             return false;
