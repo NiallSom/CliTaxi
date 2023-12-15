@@ -29,6 +29,8 @@ public interface List<T> {
      */
     T get();
 
+    T get(int index);
+
     /**
      * Removes an element from the list.
      */

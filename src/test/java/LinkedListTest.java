@@ -59,8 +59,8 @@ public class LinkedListTest {
     void removeOnlyElement() {
         LinkedList<String> list = new LinkedList<>();
         list.add("One");
-        list.remove();
-
+        list.remove("One");
+        assertTrue(list.isEmpty());
     }
 
     @Test
