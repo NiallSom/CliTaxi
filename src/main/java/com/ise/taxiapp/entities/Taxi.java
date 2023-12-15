@@ -2,7 +2,7 @@ package com.ise.taxiapp.entities;
 
 import com.ise.taxiapp.nav.Location;
 
-public class Taxi {
+public class Taxi implements Locatable {
     private final String reg;
     private final Driver driver;
     private Fare fare;
@@ -10,13 +10,28 @@ public class Taxi {
     private User user;
     private Location destination;
     private double distanceTravelled;
-    private boolean isAvailable;
-
+    private TaxiStatus status;
     public Taxi(String reg, Driver driver, Fare fare) {
         this.reg = reg;
         this.driver = driver;
         this.fare = fare;
-        isAvailable = true;
+        this.status = TaxiStatus.AVAILABLE;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Location getDestination() {
+        return destination;
+    }
+
+    public void setDestination(Location destination) {
+        this.destination = destination;
     }
 
     public Fare getFare() {
@@ -25,10 +40,6 @@ public class Taxi {
 
     public void setFare(Fare fare) {
         this.fare = fare;
-    }
-
-    public void setDestination(Location destination) {
-        this.destination = destination;
     }
 
     public void driveToDestination() {
@@ -63,19 +74,15 @@ public class Taxi {
     public void markAsAvailable() {
         distanceTravelled = 0;
         user = null;
-        isAvailable = true;
+        status = TaxiStatus.AVAILABLE;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public TaxiStatus getStatus() {
+        return status;
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
-    }
-
-    public void setAvailable(boolean available) {
-        isAvailable = available;
+    public void setStatus(TaxiStatus status) {
+        this.status = status;
     }
 
     public String toString() {
