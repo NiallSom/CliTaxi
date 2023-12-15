@@ -11,6 +11,7 @@ public class Taxi implements Locatable {
     private Location destination;
     private double distanceTravelled;
     private TaxiStatus status;
+
     public Taxi(String reg, Driver driver, Fare fare) {
         this.reg = reg;
         this.driver = driver;
@@ -51,6 +52,11 @@ public class Taxi implements Locatable {
         return (long) currentLocation.distanceTo(destination);
     }
 
+    /**
+     * Calculates the charge for the user based on distance travelled and fare applied.
+     *
+     * @return The amount to charge the user
+     */
     public double calculateCharge() {
         return fare.calculateCharge(distanceTravelled);
     }
