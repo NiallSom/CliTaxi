@@ -1,9 +1,13 @@
 package com.ise.taxiapp.nav;
 
 import com.ise.taxiapp.dataStructures.LinkedList;
+import com.ise.taxiapp.dataStructures.List;
 import com.ise.taxiapp.entities.Fare;
+import com.ise.taxiapp.entities.Locatable;
 import com.ise.taxiapp.entities.Taxi;
+import com.ise.taxiapp.entities.TaxiStatus;
 
+import java.util.Random;
 import java.util.function.Predicate;
 
 /**
@@ -15,6 +19,7 @@ public class Grid extends Region {
     private final int width;
     private final int height;
     private final Point[] points;
+    private final Random random;
 
     /**
      * Constructs a grid with the specified width and height.
@@ -32,6 +37,7 @@ public class Grid extends Region {
                 points[x + y * width] = new Point(x, y);
             }
         }
+        random = new Random();
     }
 
     /**
@@ -85,7 +91,7 @@ public class Grid extends Region {
      * @param radius    the radius within which to search for an object
      * @return the first acceptable object found, or null if none were found within the radius
      */
-    public Object findNearest(Point origin, Predicate<? super Object> predicate, double radius) {
+    public Object findNearest(Point origin, Predicate<Object> predicate, double radius) {
         // PriorityQueue
         LinkedList<Point> queue = new LinkedList<>();
         // HashMap
@@ -99,7 +105,7 @@ public class Grid extends Region {
             for (Point neighbour : neighboursOf(current)) {
                 if (visited.contains(neighbour)) continue;
                 if (origin.distanceTo(neighbour) > radius) continue;
-                for (Object item : neighbour.getObjects()) {
+                for (Locatable item : neighbour.getObjects()) {
                     if (predicate.test(item)) return item;
                 }
                 queue.add(neighbour);
@@ -129,7 +135,38 @@ public class Grid extends Region {
 
     @Override
     public Taxi callTaxi(Location location, Fare fare, int radiusKm) {
-        // Todo implement scheduler
-        return null;
+        return (Taxi) findNearest((Point) location,
+                o -> o instanceof Taxi taxi
+                        && taxi.getFare().equals(fare)
+                        && taxi.getStatus().equals(TaxiStatus.AVAILABLE),
+                radiusKm);
+    }
+
+    public void moveTaxiRandomly(Taxi taxi) {
+        // Busy taxis have a route already, they should not move randomly
+        if (taxi.getStatus() != TaxiStatus.AVAILABLE) return;
+        Point p = (Point) taxi.getLocation();
+        // Move to a random adjacent point
+        List<Point> neighbours = this.neighboursOf(p);
+        int index = random.nextInt(neighbours.size());
+        Point newPoint = neighbours.get(index);
+        this.setLocation(taxi, newPoint.x() + newPoint.y() * width);
+    }
+
+    public void setLocation(Locatable l, int index) {
+        setLocation(l, index % width, index / width);
+    }
+
+    public void setLocation(Locatable l, int x, int y) {
+        Point oldPoint = (Point) l.getLocation();
+        Point point = this.get(x, y);
+        l.setLocation(point);
+        point.getObjects().add(l);
+        if (oldPoint != null) {
+            try {
+                oldPoint.getObjects().remove(l);
+            } catch (UnsupportedOperationException ignored) {
+            }
+        }
     }
 }
