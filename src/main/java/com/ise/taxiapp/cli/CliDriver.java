@@ -48,20 +48,20 @@ public class CliDriver {
         user = new User(username);
         grid = initRegion();
         populateRegionWithTaxis();
-        createSingleTaxi();
         String continuePrompt = """
                 Would you like to book a taxi?
                 (0) No
                 (1) Yes""";
         // Loop until the user no longer wishes to book a taxi
         while (promptInput(continuePrompt, 1, scanner) == 1) {
+            // Send the user to a random location
             grid.setLocation(user, random.nextInt(grid.getWidth() * grid.getWidth()));
             Location destination = chooseDestination();
             Fare fare = chooseFare();
             callTaxi(destination, fare);
         }
         clearScreen();
-        System.out.println("Thank you for rating TaxiApp!");
+        System.out.println("Thank you for using TaxiApp!");
     }
 
     /**
@@ -107,16 +107,18 @@ public class CliDriver {
     @SuppressWarnings("BusyWait")
     public void callTaxi(Location destination, Fare fare) throws InterruptedException {
         Taxi taxi;
-        // Keep looping until a taxi is available within 10km of the user
+        // Keep looping until a taxi is available within <radius> km of the user
         int radius = 4;
         do {
             clearScreen();
             printGrid();
             System.out.println("Searching for a taxi...");
+            // Move that taxis randomly once every frame
             grid.getTaxiList().forEach(grid::moveTaxiRandomly);
             Thread.sleep(1000);
         } while ((taxi = grid.callTaxi(user.getLocation(), fare, radius)) == null);
 
+        // This taxi should not be considered when searching for a lift until this ride commences
         taxi.setStatus(TaxiStatus.EN_ROUTE);
         driveTo(taxi, user.getLocation());
 
@@ -124,12 +126,15 @@ public class CliDriver {
         printGrid();
         System.out.println("Taxi has arrived! Hop in!");
         promptEnter();
+
         taxi.setStatus(TaxiStatus.BUSY);
         taxi.setUser(user);
         Point userPoint = (Point) user.getLocation();
+        // Remove the user from the map
         grid.get(userPoint.x(), userPoint.y()).getObjects().remove(user);
         driveTo(taxi, destination);
 
+        // Charge calculated based on distance travelled and fare applied
         double charge = taxi.calculateCharge();
         user.charge(charge);
         displayText("""
@@ -142,7 +147,6 @@ public class CliDriver {
         taxi.getDriver().rate(rating);
         taxi.markAsAvailable();
     }
-
 
     public Grid initRegion() {
         return new Grid(10, 10);
@@ -163,7 +167,7 @@ public class CliDriver {
         }
     }
 
-
+    @SuppressWarnings("unused")
     private void createSingleTaxi() {
         Taxi t = new Taxi("123", new Driver("John", "456"), Fare.STANDARD_FARE);
         grid.getTaxiList().add(t);
@@ -186,11 +190,12 @@ public class CliDriver {
                 if (point.getObjects().isEmpty()) {
                     colour = RESET;
                 } else {
-                    for (Object o : point.getObjects()) {
-                        if (o instanceof User) {
+                    // In Java 21 this can be replaced by pattern matching
+                    for (Locatable l : point.getObjects()) {
+                        if (l instanceof User) {
                             colour = USER_COlOUR;
                             break;
-                        } else if (o instanceof Taxi taxi) {
+                        } else if (l instanceof Taxi taxi) {
                             colour = taxi.getFare().getColour();
                         } else if (colour.isEmpty()) {
                             colour = RESET;
@@ -203,17 +208,33 @@ public class CliDriver {
         }
     }
 
-    public void driveTowards(Taxi taxi, Point p) {
+    /**
+     * Moves the given taxi one square towards the given point.
+     * The taxi will travel horizontally first, then vertically.
+     *
+     * @param taxi  The taxi to be moved
+     * @param point The point to travel towards
+     */
+    public void driveTowards(Taxi taxi, Point point) {
         Point taxiPoint = (Point) taxi.getLocation();
         int newX = taxiPoint.x();
         int newY = taxiPoint.y();
-        if (newX < p.x()) newX++;
-        else if (newX > p.x()) newX--;
-        else if (newY < p.y()) newY++;
-        else if (newY > p.y()) newY--;
+        if (newX < point.x()) newX++;
+        else if (newX > point.x()) newX--;
+        else if (newY < point.y()) newY++;
+        else if (newY > point.y()) newY--;
         grid.setLocation(taxi, newX, newY);
     }
 
+
+    /**
+     * Pathfinds the given taxi to the given point.
+     * Uses {@link #driveTowards(Taxi, Point)} to move the taxi one point at a time.
+     *
+     * @param taxi     The taxi to be moved
+     * @param location The point where the taxi will end up
+     * @throws InterruptedException Throws if the loop is interrupted during the thread sleep cycle
+     */
     @SuppressWarnings("BusyWait")
     private void driveTo(Taxi taxi, Location location) throws InterruptedException {
         taxi.setDestination(location);
