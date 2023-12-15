@@ -77,6 +77,10 @@ public class LinkedList<T> implements List<T>, Iterable<T> {
         return this.current.data;
     }
 
+    public T get(int index) {
+        return this.stream().skip(index).findFirst().orElse(null);
+    }
+
     /**
      * Sets the pointer to the head of the linked list
      */
@@ -160,18 +164,15 @@ public class LinkedList<T> implements List<T>, Iterable<T> {
         if (isEmpty()) {
             throw new UnsupportedOperationException("Cannot remove from an empty list");
         }
-        while (hasNext()) {
+        findFirst();
+        do {
             T data = get();
-            if (data == toRemove) {
+            if (data.equals(toRemove)) {
                 remove();
                 return true;
             }
-        }
-        T data = get();
-        if (data == toRemove) {
-            remove();
-            return true;
-        }
+            getNext();
+        } while (hasNext());
         return false;
     }
 
