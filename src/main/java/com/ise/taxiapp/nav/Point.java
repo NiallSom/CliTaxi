@@ -68,17 +68,6 @@ public class Point implements Location {
         return Math.abs(x - point.x()) + Math.abs(y - point.y());
     }
 
-    /**
-     * Iterates through the List of objects and returns the first one
-     * that matches the provided Predicate.
-     *
-     * @param p The Predicate used for testing each object.
-     * @return The first object that matches, or null if no match is found.
-     */
-    public Object findMatch(Predicate<Locatable> p) {
-        return objects.stream().filter(p).findAny().orElse(null);
-    }
-
     public int x() {
         return x;
     }
