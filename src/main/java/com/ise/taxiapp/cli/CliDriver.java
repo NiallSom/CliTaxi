@@ -7,6 +7,9 @@ import com.ise.taxiapp.nav.Point;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -179,15 +182,16 @@ public class CliDriver {
      * This method will populate the taxis in region linked list with random taxi data stored in taxiData.csv
      */
     public void populateRegionWithTaxis() throws IOException {
-        // Todo make this work with jar files
-        BufferedReader bufferedReader = new BufferedReader(new FileReader("src/main/java/com/ise/taxiapp/taxiData.csv"));
+        InputStream stream = CliDriver.class.getClassLoader().getResourceAsStream("taxiData.csv");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(stream)));
         String line;
-        while ((line = bufferedReader.readLine()) != null) {
+        while ((line = reader.readLine()) != null) {
             String[] lines = line.split(",");
             Taxi taxi = new Taxi(lines[1], new Driver(lines[0], lines[2]), Fare.valueOf(lines[4]));
             grid.setLocation(taxi, Integer.parseInt(lines[5]));
             grid.insertTaxi(taxi);
         }
+        reader.close();
     }
 
     @SuppressWarnings("unused")
