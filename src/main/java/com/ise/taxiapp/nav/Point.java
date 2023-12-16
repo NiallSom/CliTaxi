@@ -68,13 +68,21 @@ public class Point implements Location {
         return Math.abs(x - point.x()) + Math.abs(y - point.y());
     }
 
+    /**
+     * returns x value
+     * @return x
+     */
     public int x() {
         return x;
     }
-
+    /**
+     * returns y value
+     * @return y
+     */
     public int y() {
         return y;
     }
+
 
     @Override
     public boolean equals(Object obj) {
