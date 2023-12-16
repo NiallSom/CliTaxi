@@ -5,14 +5,11 @@ import com.ise.taxiapp.nav.Grid;
 import com.ise.taxiapp.nav.Location;
 import com.ise.taxiapp.nav.Point;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
-import static com.ise.taxiapp.cli.AsciiColours.RED;
-import static com.ise.taxiapp.cli.AsciiColours.RESET;
+import static com.ise.taxiapp.cli.AsciiColours.*;
 import static com.ise.taxiapp.cli.Util.*;
 
 
@@ -20,8 +17,9 @@ import static com.ise.taxiapp.cli.Util.*;
  * Handles all CLI graphics
  */
 public class CliDriver {
-    public static final String BOX = "☒";
+    public static final String BOX = "■";
     public static final String USER_COlOUR = RED;
+    public static final String DESTINATION_COLOUR = PURPLE;
     public static final String RATING_TEXT = """
             How would you rate your ride 0-5?
             (0)☆☆☆☆☆
@@ -37,6 +35,28 @@ public class CliDriver {
 
     public static void main(String[] args) throws InterruptedException, IOException {
         new CliDriver().run();
+    }
+
+    private String calculateColour(Point point) {
+        String colour = "";
+        // In Java 21 this can be replaced by pattern matching
+        for (Locatable l : point.getObjects()) {
+            if (l instanceof User) {
+                colour = USER_COlOUR;
+                break;
+            } else if (l instanceof Taxi taxi) {
+                colour = taxi.getFare().getColour();
+            } else if (l instanceof Destination && colour.isEmpty()) {
+                colour = DESTINATION_COLOUR;
+            }
+            // If no colour is defined for the given object, do not colour it
+        }
+        if (colour.isEmpty()) {
+            Point p = (Point) user.getLocation();
+            colour = ((point.x() == p.x()) || (point.y() == p.y())) ? YELLOW : BLACK;
+//            colour = BLACK;
+        }
+        return colour;
     }
 
     /**
@@ -60,9 +80,10 @@ public class CliDriver {
         while (promptInput(continuePrompt, 1, scanner) == 1) {
             // Send the user to a random location
             grid.setLocation(user, random.nextInt(grid.getWidth() * grid.getWidth()));
-            Location destination = chooseDestination();
+            Destination destination = chooseDestination();
             Fare fare = chooseFare();
-            callTaxi(destination, fare);
+            Taxi taxi = callTaxi(fare);
+            driveToDestination(taxi, destination);
         }
         clearScreen();
         System.out.println("Thank you for using TaxiApp!");
@@ -73,11 +94,13 @@ public class CliDriver {
      *
      * @return The location to travel to
      */
-    public Location chooseDestination() {
+    public Destination chooseDestination() {
         int destinationIndex = promptInput("""
                 Where to?
                 Enter a grid index from 0-99:""", 99, scanner);
-        return Point.fromIndex(destinationIndex, grid.getWidth());
+        Destination destination = new Destination(Point.fromIndex(destinationIndex, grid.getWidth()));
+        grid.setLocation(destination, (Point) destination.getLocation());
+        return destination;
     }
 
     /**
@@ -99,17 +122,15 @@ public class CliDriver {
         };
     }
 
-
     /**
      * Calls a taxi.
      * Once the taxi arrives, it will take the user to their chosen destination
      * and charge their bank account.
      *
-     * @param destination The destination to travel to
-     * @param fare        The fare to charge the user
+     * @param fare The fare to charge the user
      */
     @SuppressWarnings("BusyWait")
-    public void callTaxi(Location destination, Fare fare) throws InterruptedException {
+    public Taxi callTaxi(Fare fare) throws InterruptedException {
         Taxi taxi;
         // Keep looping until a taxi is available within <radius> km of the user
         int radius = 4;
@@ -130,13 +151,14 @@ public class CliDriver {
         printGrid();
         System.out.println("Taxi has arrived! Hop in!");
         promptEnter();
+        return taxi;
+    }
 
+    private void driveToDestination(Taxi taxi, Destination destination) throws InterruptedException {
         taxi.setStatus(TaxiStatus.BUSY);
         taxi.setUser(user);
-        Point userPoint = (Point) user.getLocation();
         // Remove the user from the map
-        grid.get(userPoint.x(), userPoint.y()).getObjects().remove(user);
-        driveTo(taxi, destination);
+        driveTo(taxi, destination.getLocation());
 
         // Charge calculated based on distance travelled and fare applied
         double charge = taxi.calculateCharge();
@@ -154,6 +176,7 @@ public class CliDriver {
 
     /**
      * Initialises the map size to a width and height of 10
+     *
      * @return
      */
     public Grid initRegion() {
@@ -164,15 +187,16 @@ public class CliDriver {
      * This method will populate the taxis in region linked list with random taxi data stored in taxiData.csv
      */
     public void populateRegionWithTaxis() throws IOException {
-        // Todo make this work with jar files
-        BufferedReader bufferedReader = new BufferedReader(new FileReader("src/main/java/com/ise/taxiapp/taxiData.csv"));
+        InputStream stream = CliDriver.class.getClassLoader().getResourceAsStream("taxiData.csv");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(stream)));
         String line;
-        while ((line = bufferedReader.readLine()) != null) {
+        while ((line = reader.readLine()) != null) {
             String[] lines = line.split(",");
             Taxi taxi = new Taxi(lines[1], new Driver(lines[0], lines[2]), Fare.valueOf(lines[4]));
             grid.setLocation(taxi, Integer.parseInt(lines[5]));
             grid.insertTaxi(taxi);
         }
+        reader.close();
     }
 
     @SuppressWarnings("unused")
@@ -189,27 +213,12 @@ public class CliDriver {
                     %s☒: Standard Taxi
                     %s☒: Express Taxi
                     %s☒: XL Taxi
-                """, USER_COlOUR, Fare.STANDARD_FARE.getColour(), Fare.EXPRESS_FARE.getColour(), Fare.EXPRESS_FARE.getColour());
+                """, USER_COlOUR, Fare.STANDARD_FARE.getColour(), Fare.EXPRESS_FARE.getColour(), Fare.EXTRA_LARGE_FARE.getColour());
 
         for (int y = 0; y < grid.getHeight(); y++) {
             for (int x = 0; x < grid.getWidth(); x++) {
                 Point point = grid.get(x, y);
-                String colour = "";
-                if (point.getObjects().isEmpty()) {
-                    colour = RESET;
-                } else {
-                    // In Java 21 this can be replaced by pattern matching
-                    for (Locatable l : point.getObjects()) {
-                        if (l instanceof User) {
-                            colour = USER_COlOUR;
-                            break;
-                        } else if (l instanceof Taxi taxi) {
-                            colour = taxi.getFare().getColour();
-                        } else if (colour.isEmpty()) {
-                            colour = RESET;
-                        }
-                    }
-                }
+                String colour = calculateColour(point);
                 System.out.printf("%s%s%s ", colour, BOX, RESET);
             }
             System.out.println(RESET);
@@ -232,6 +241,9 @@ public class CliDriver {
         else if (newY < point.y()) newY++;
         else if (newY > point.y()) newY--;
         grid.setLocation(taxi, newX, newY);
+        if (taxi.getUser() != null) {
+            grid.setLocation(taxi.getUser(), newX, newY);
+        }
     }
 
 
@@ -253,7 +265,7 @@ public class CliDriver {
             printGrid();
             System.out.printf("""
                     Driver %s travelling to %s
-                    He should arrive in %d minutes%n""", taxi.getDriver(), location, taxi.timeToDestination());
+                    They should arrive in %d minutes%n""", taxi.getDriver(), location, taxi.timeToDestination());
             Thread.sleep(1000);
         }
         taxi.driveToDestination();

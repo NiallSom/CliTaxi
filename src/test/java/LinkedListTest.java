@@ -59,7 +59,7 @@ public class LinkedListTest {
     void removeOnlyElement() {
         LinkedList<String> list = new LinkedList<>();
         list.add("One");
-        list.remove("One");
+        list.remove();
         assertTrue(list.isEmpty());
     }
 
@@ -78,5 +78,38 @@ public class LinkedListTest {
         LinkedList<String> list = new LinkedList<>();
         list.add("One");
         list.remove();
+    }
+
+    @Test
+    void removeHeadNamed() {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("One");
+        list.add("Two");
+        list.remove("One");
+        list.findFirst();
+        assertEquals("Two", list.get());
+    }
+
+    @Test
+    void removeNamed() {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("One");
+        list.add("Two");
+        list.remove("Two");
+        list.findFirst();
+        assertEquals("One", list.get());
+    }
+
+    @Test
+    void removeSandwichedNamed() {
+        LinkedList<String> list = new LinkedList<>();
+        list.add("One");
+        list.add("Two");
+        list.add("Three");
+        list.remove("Two");
+        list.findFirst();
+        assertEquals("One", list.get());
+        list.getNext();
+        assertEquals("Three", list.get());
     }
 }

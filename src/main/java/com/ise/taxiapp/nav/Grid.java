@@ -142,10 +142,6 @@ public class Grid extends Region {
                 radiusKm);
     }
 
-    /**
-     * This will randomly move the taxi in any direction as long as it is free
-     * @param taxi
-     */
     public void moveTaxiRandomly(Taxi taxi) {
         // Busy taxis have a route already, they should not move randomly
         if (taxi.getStatus() != TaxiStatus.AVAILABLE) return;
@@ -157,13 +153,12 @@ public class Grid extends Region {
         this.setLocation(taxi, newPoint.x() + newPoint.y() * width);
     }
 
-    /**
-     * Sets the location of a given taxi
-     * @param l
-     * @param index
-     */
     public void setLocation(Locatable l, int index) {
         setLocation(l, index % width, index / width);
+    }
+
+    public void setLocation(Locatable l, Point p) {
+        setLocation(l, p.x(), p.y());
     }
 
     public void setLocation(Locatable l, int x, int y) {
