@@ -7,14 +7,26 @@ import com.ise.taxiapp.entities.Taxi;
 public abstract class Region {
     protected LinkedList<Taxi> taxiList;
 
+    /**
+     * stores the taxi within a region in a linked list
+     */
     protected Region() {
         taxiList = new LinkedList<>();
     }
 
+    /**
+     * returns the linked list of Taxis
+     * @return Taxi linked list
+     */
     public LinkedList<Taxi> getTaxiList() {
         return taxiList;
     }
 
+    /**
+     * Inserts taxi into linked list if the list does not already contain that taxi
+     * @param taxi
+     * @return
+     */
     public boolean insertTaxi(Taxi taxi) {
         if (taxiList.contains(taxi)) {
             return false;
@@ -23,10 +35,19 @@ public abstract class Region {
         return true;
     }
 
+    /**
+     * removes taxi from taxi linked list
+     * @param taxi
+     * @return
+     */
     public boolean removeTaxi(Taxi taxi) {
         return taxiList.remove(taxi);
     }
 
+    /**
+     * returns the amount of taxis within the region
+     * @return amount of taxis
+     */
     public int taxiCount() {
         return taxiList.size();
     }
