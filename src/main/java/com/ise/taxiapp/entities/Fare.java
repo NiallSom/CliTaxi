@@ -7,8 +7,8 @@ import static com.ise.taxiapp.cli.AsciiColours.*;
  * Each fare calculates the amount to charge the user differently.
  */
 public enum Fare {
-    STANDARD_FARE(5, 4.5, CYAN),
-    EXTRA_LARGE_FARE(6, 6, YELLOW),
+    STANDARD_FARE(5, 4.5, YELLOW),
+    EXTRA_LARGE_FARE(6, 6, BLUE),
     EXPRESS_FARE(10, 4, GREEN);
 
 

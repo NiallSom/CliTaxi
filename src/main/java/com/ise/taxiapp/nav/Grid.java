@@ -157,6 +157,10 @@ public class Grid extends Region {
         setLocation(l, index % width, index / width);
     }
 
+    public void setLocation(Locatable l, Point p) {
+        setLocation(l, p.x(), p.y());
+    }
+
     public void setLocation(Locatable l, int x, int y) {
         Point oldPoint = (Point) l.getLocation();
         Point point = this.get(x, y);
