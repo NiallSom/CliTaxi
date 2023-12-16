@@ -14,14 +14,26 @@ public class User implements Locatable {
         this.balance = 20.0;
     }
 
+    /**
+     * charges the cost of the journey from the users account
+     * @param charge the cost of the journey
+     */
     public void charge(double charge) {
         balance -= charge;
     }
 
+    /**
+     * returns the users username
+     * @return username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * returns the users balance
+     * @return account balance
+     */
     public double getBalance() {
         return balance;
     }
