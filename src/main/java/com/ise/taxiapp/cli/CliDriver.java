@@ -15,6 +15,10 @@ import static com.ise.taxiapp.cli.AsciiColours.RED;
 import static com.ise.taxiapp.cli.AsciiColours.RESET;
 import static com.ise.taxiapp.cli.Util.*;
 
+
+/**
+ * Handles all CLI graphics
+ */
 public class CliDriver {
     public static final String BOX = "☒";
     public static final String USER_COlOUR = RED;
@@ -148,6 +152,10 @@ public class CliDriver {
         taxi.markAsAvailable();
     }
 
+    /**
+     * Initialises the map size to a width and height of 10
+     * @return
+     */
     public Grid initRegion() {
         return new Grid(10, 10);
     }
