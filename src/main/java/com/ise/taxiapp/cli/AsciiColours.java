@@ -1,5 +1,6 @@
 package com.ise.taxiapp.cli;
 
+@SuppressWarnings("unused")
 public class AsciiColours {
     public final static String RESET = "\033[0m";
     public final static String BLACK = "\u001B[30m";
