@@ -1,5 +1,9 @@
 package com.ise.taxiapp.cli;
 
+
+/**
+ * Stores the ASCII values of colours to be used in displaying the map
+ */
 public class AsciiColours {
     public final static String RED = "\u001B[31m";
     public final static String GREEN = "\u001B[32m";
