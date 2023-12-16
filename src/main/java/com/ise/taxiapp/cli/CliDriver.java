@@ -135,20 +135,32 @@ public class CliDriver {
         return taxi;
     }
 
+    /**
+     * Drives the user to the destination.
+     * Upon arrival, the user is charged, with the option to attempt to run away.
+     *
+     * @param taxi        The taxi that will drive to the destination
+     * @param destination The destination to drive to
+     * @throws InterruptedException If the program is interrupted
+     */
     private void driveToDestination(Taxi taxi, Destination destination) throws InterruptedException {
         taxi.setStatus(TaxiStatus.BUSY);
         taxi.setUser(user);
-        // Remove the user from the map
         driveTo(taxi, destination.getLocation());
 
         // Charge calculated based on distance travelled and fare applied
         double charge = taxi.calculateCharge();
         optionToRun(charge);
-        int rating = promptInput("How would you rate your ride 0-5?", 5, scanner); // feel as if this should be in another method
+        int rating = promptInput(RATING_TEXT, 5, scanner);
         taxi.getDriver().rate(rating);
         taxi.markAsAvailable();
     }
 
+    /**
+     * Provides the user with the option to run away, with a 10% success rate.
+     * If the fail, they are charged double.
+     * @param charge The original charge
+     */
     public void optionToRun(double charge) {
         int choice = promptInput("""
                 Would you like to run away (10% chance)
@@ -161,23 +173,18 @@ public class CliDriver {
             if (random < 0.10) {
                 System.out.println("You got away!");
             } else {
-                System.out.println("You tripped over the curb, you have been caught");
-                user.charge(charge * 2);
                 displayText("""
-                        We have arrived!
-                        Total charge: %.2f.
-                        This has been charged to your account.
-                        New account balance: %s.%n""", charge, user.getBalance());
+                        You tripped over the curb, you have been caught
+                        Doubling your charge...""");
+                charge *= 2;
             }
-        } else {
-            user.charge(charge);
-            displayText("""
-                    We have arrived!
-                    Total charge: $%.2f.
-                    This has been charged to your account.
-                    New account balance: $%.2f.%n""", charge, user.getBalance());
-
         }
+        user.charge(charge);
+        displayText("""
+                We have arrived!
+                Total charge: %.2f.
+                This has been charged to your account.
+                New account balance: %s.%n""", charge, user.getBalance());
     }
 
     /**
