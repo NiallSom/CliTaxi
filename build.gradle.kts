@@ -2,8 +2,8 @@ plugins {
     id("java")
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+group = "com.ise.taxiapp"
+version = "1.1.0"
 
 repositories {
     mavenCentral()
