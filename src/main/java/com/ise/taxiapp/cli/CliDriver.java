@@ -143,16 +143,41 @@ public class CliDriver {
 
         // Charge calculated based on distance travelled and fare applied
         double charge = taxi.calculateCharge();
-        user.charge(charge);
-        displayText("""
-                We have arrived!
-                Total charge: $%.2f.
-                This has been charged to your account.
-                New account balance: $%.2f.%n""", charge, user.getBalance());
-
-        int rating = promptInput(RATING_TEXT, 5, scanner);
+        optionToRun(charge);
+        int rating = promptInput("How would you rate your ride 0-5?", 5, scanner); // feel as if this should be in another method
         taxi.getDriver().rate(rating);
         taxi.markAsAvailable();
+    }
+
+    public void optionToRun(double charge) {
+        int choice = promptInput("""
+                Would you like to run away (10% chance)
+                (1) Yes
+                (0) No""", 1, scanner);
+        if (choice == 1) {
+            double random = Math.random();
+            System.out.println("Opening the door....");
+            System.out.println("Running...");
+            if (random < 0.10) {
+                System.out.println("You got away!");
+            } else {
+                System.out.println("You tripped over the curb, you have been caught");
+                user.charge(charge * 2);
+                displayText("""
+                        We have arrived!
+                        Total charge: %.2f.
+                        This has been charged to your account.
+                        New account balance: %s.%n""", charge, user.getBalance());
+            }
+        } else {
+            user.charge(charge);
+            displayText("""
+                    We have arrived!
+                    Total charge: $%.2f.
+                    This has been charged to your account.
+                    New account balance: $%.2f.%n""", charge, user.getBalance());
+
+        }
     }
 
     /**
