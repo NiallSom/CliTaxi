@@ -5,7 +5,11 @@ import com.ise.taxiapp.nav.Grid;
 import com.ise.taxiapp.nav.Location;
 import com.ise.taxiapp.nav.Point;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -35,28 +39,6 @@ public class CliDriver {
 
     public static void main(String[] args) throws InterruptedException, IOException {
         new CliDriver().run();
-    }
-
-    private String calculateColour(Point point) {
-        String colour = "";
-        // In Java 21 this can be replaced by pattern matching
-        for (Locatable l : point.getObjects()) {
-            if (l instanceof User) {
-                colour = USER_COlOUR;
-                break;
-            } else if (l instanceof Taxi taxi) {
-                colour = taxi.getFare().getColour();
-            } else if (l instanceof Destination && colour.isEmpty()) {
-                colour = DESTINATION_COLOUR;
-            }
-            // If no colour is defined for the given object, do not colour it
-        }
-        if (colour.isEmpty()) {
-            Point p = (Point) user.getLocation();
-            colour = ((point.x() == p.x()) || (point.y() == p.y())) ? YELLOW : BLACK;
-//            colour = BLACK;
-        }
-        return colour;
     }
 
     /**
@@ -123,11 +105,10 @@ public class CliDriver {
     }
 
     /**
-     * Calls a taxi.
-     * Once the taxi arrives, it will take the user to their chosen destination
-     * and charge their bank account.
+     * Calls a taxi, returning it once it has arrived
      *
      * @param fare The fare to charge the user
+     * @return The taxi that has arrived to transport the user
      */
     @SuppressWarnings("BusyWait")
     public Taxi callTaxi(Fare fare) throws InterruptedException {
@@ -177,7 +158,7 @@ public class CliDriver {
     /**
      * Initialises the map size to a width and height of 10
      *
-     * @return
+     * @return New Grid on which taxis may be placed
      */
     public Grid initRegion() {
         return new Grid(10, 10);
@@ -199,13 +180,19 @@ public class CliDriver {
         reader.close();
     }
 
+    /**
+     * Places one taxi on the grid.
+     */
     @SuppressWarnings("unused")
-    private void createSingleTaxi() {
+    private void populateWithSingleTaxi() {
         Taxi t = new Taxi("123", new Driver("John", "456"), Fare.STANDARD_FARE);
         grid.getTaxiList().add(t);
         grid.setLocation(t, 5, 6);
     }
 
+    /**
+     * Prints the grid. Taxis, users and destinations all have unique colours
+     */
     public void printGrid() {
         System.out.printf("""
                     Key:
@@ -223,6 +210,36 @@ public class CliDriver {
             }
             System.out.println(RESET);
         }
+    }
+
+    /**
+     * Calculates the colour that should be displayed on a given point,
+     * based on the contents of that point.
+     * The colour is returned as a String in ASCII terminal representation,
+     * e.g. BLACK = "u001B[30m"
+     *
+     * @param point The point to calculate the colour for.
+     * @return ASCII colour value
+     */
+    private String calculateColour(Point point) {
+        String colour = "";
+        // In Java 21 this can be replaced by pattern matching
+        for (Locatable l : point.getObjects()) {
+            if (l instanceof User) {
+                colour = USER_COlOUR;
+                break;
+            } else if (l instanceof Taxi taxi) {
+                colour = taxi.getFare().getColour();
+            } else if (l instanceof Destination && colour.isEmpty()) {
+                colour = DESTINATION_COLOUR;
+            }
+            // If no colour is defined for the given object, do not colour it
+        }
+        if (colour.isEmpty()) {
+            Point p = (Point) user.getLocation();
+            colour = ((point.x() == p.x()) || (point.y() == p.y())) ? YELLOW : BLACK;
+        }
+        return colour;
     }
 
     /**

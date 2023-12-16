@@ -4,7 +4,14 @@ import com.ise.taxiapp.dataStructures.LinkedList;
 import com.ise.taxiapp.entities.Fare;
 import com.ise.taxiapp.entities.Taxi;
 
+/**
+ * Class representing a geographical area where the taxi company operates.
+ * Example implementations may include a grid or a graph.
+ */
 public abstract class Region {
+    /**
+     * List of all taxis in the region, available or otherwise.
+     */
     protected LinkedList<Taxi> taxiList;
 
     /**
@@ -16,6 +23,7 @@ public abstract class Region {
 
     /**
      * returns the linked list of Taxis
+     *
      * @return Taxi linked list
      */
     public LinkedList<Taxi> getTaxiList() {
@@ -24,8 +32,9 @@ public abstract class Region {
 
     /**
      * Inserts taxi into linked list if the list does not already contain that taxi
-     * @param taxi
-     * @return
+     *
+     * @param taxi The taxi to insert
+     * @return If the taxi was successfully added
      */
     public boolean insertTaxi(Taxi taxi) {
         if (taxiList.contains(taxi)) {
@@ -37,8 +46,9 @@ public abstract class Region {
 
     /**
      * removes taxi from taxi linked list
-     * @param taxi
-     * @return
+     *
+     * @param taxi The taxi to remove
+     * @return If the taxi was successfully removed
      */
     public boolean removeTaxi(Taxi taxi) {
         return taxiList.remove(taxi);
@@ -46,6 +56,7 @@ public abstract class Region {
 
     /**
      * returns the amount of taxis within the region
+     *
      * @return amount of taxis
      */
     public int taxiCount() {

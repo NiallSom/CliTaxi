@@ -4,11 +4,19 @@ import com.ise.taxiapp.nav.Location;
 
 import java.util.Objects;
 
+/**
+ * Class representing the passenger of a taxi.
+ */
 public class User implements Locatable {
     private final String username;
     private Location currentLocation;
     private double balance;
 
+    /**
+     * Create a user with the given username.
+     *
+     * @param username The username of the user
+     */
     public User(String username) {
         this.username = username;
         this.balance = 20.0;
@@ -16,6 +24,7 @@ public class User implements Locatable {
 
     /**
      * charges the cost of the journey from the users account
+     *
      * @param charge the cost of the journey
      */
     public void charge(double charge) {
@@ -24,6 +33,7 @@ public class User implements Locatable {
 
     /**
      * returns the users username
+     *
      * @return username
      */
     public String getUsername() {
@@ -32,17 +42,28 @@ public class User implements Locatable {
 
     /**
      * returns the users balance
+     *
      * @return account balance
      */
     public double getBalance() {
         return balance;
     }
 
+    /**
+     * Returns the location of the object on the grid.
+     *
+     * @return The object's current location
+     */
     @Override
     public Location getLocation() {
         return currentLocation;
     }
 
+    /**
+     * Sets the location of the object on the grid.
+     *
+     * @param location The new location of the object
+     */
     @Override
     public void setLocation(Location location) {
         this.currentLocation = location;

@@ -5,7 +5,16 @@ package com.ise.taxiapp.entities;
  * Only available taxis should be considered when searching for a lift.
  */
 public enum TaxiStatus {
+    /**
+     * The taxi is available to pick up passengers.
+     */
     AVAILABLE(),
+    /**
+     * The taxi is on the way to pick up a passenger.
+     */
     EN_ROUTE(),
-    BUSY();
+    /**
+     * The taxi is currently transporting a passenger to their destination.
+     */
+    BUSY()
 }

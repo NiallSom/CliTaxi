@@ -29,6 +29,13 @@ public interface List<T> {
      */
     T get();
 
+    /**
+     * Returns the object at the given index.
+     * This is an O(n) operation.
+     *
+     * @param index The index to retrieve from
+     * @return The object at the given index, or null if the index is out of bounds
+     */
     T get(int index);
 
     /**

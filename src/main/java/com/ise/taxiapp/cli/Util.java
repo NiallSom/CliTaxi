@@ -2,6 +2,9 @@ package com.ise.taxiapp.cli;
 
 import java.util.Scanner;
 
+/**
+ * Class containing useful util methods for interacting through the terminal.
+ */
 public class Util {
 
     /**
@@ -10,6 +13,8 @@ public class Util {
      *
      * @param prompt   Prompt to display to the user displaying valid options
      * @param maxValid The largest numerical input that is valid
+     * @param scanner  The scanner object to receive input from
+     * @return The input of the user, valid within the given bounds
      */
     public static int promptInput(String prompt, int maxValid, Scanner scanner) {
         while (true) {

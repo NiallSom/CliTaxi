@@ -142,6 +142,12 @@ public class Grid extends Region {
                 radiusKm);
     }
 
+    /**
+     * Moves the given taxi randomly, if it does not currently have a destination.
+     * Taxis will move one square left, right, up or down.
+     *
+     * @param taxi The taxi to be moved
+     */
     public void moveTaxiRandomly(Taxi taxi) {
         // Busy taxis have a route already, they should not move randomly
         if (taxi.getStatus() != TaxiStatus.AVAILABLE) return;
@@ -153,14 +159,33 @@ public class Grid extends Region {
         this.setLocation(taxi, newPoint.x() + newPoint.y() * width);
     }
 
+    /**
+     * Moves the given Locatable to the given grid index.
+     *
+     * @param l     The Locatable to move
+     * @param index Grid index, where index = x + y * width
+     */
     public void setLocation(Locatable l, int index) {
         setLocation(l, index % width, index / width);
     }
 
+    /**
+     * Moves the given Locatable to the given Point.
+     *
+     * @param l The Locatable to move
+     * @param p The point to move the Locatable to
+     */
     public void setLocation(Locatable l, Point p) {
         setLocation(l, p.x(), p.y());
     }
 
+    /**
+     * Moves the given Locatable to the Point with the given x and y.
+     *
+     * @param l The Locatable to move
+     * @param x The x coordinate to move to
+     * @param y The y coordinate to move to
+     */
     public void setLocation(Locatable l, int x, int y) {
         Point oldPoint = (Point) l.getLocation();
         Point point = this.get(x, y);

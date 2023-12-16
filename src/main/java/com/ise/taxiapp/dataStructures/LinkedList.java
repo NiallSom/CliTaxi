@@ -19,6 +19,9 @@ public class LinkedList<T> implements List<T>, Iterable<T> {
     private ListNode current;
     private int size;
 
+    /**
+     * Creates an empty linked list.
+     */
     public LinkedList() {
         head = current = null;
         size = 0;
