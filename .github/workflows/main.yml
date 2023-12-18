@@ -16,6 +16,8 @@ jobs:
               distribution: 'adopt'
               java-version: '17'
               # Optionally, you can specify java-package: jdk # For a specific JDK package
+          - name: Grant execute permission to Gradle wrapper
+            run: chmod +x ./gradlew
 
           - name: Build with Gradle
             run: ./gradlew build --no-daemon
