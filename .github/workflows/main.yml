@@ -10,7 +10,22 @@ jobs:
     steps:
           - name: Check Out Repo 
             uses: actions/checkout@v2
+          - name: Set up JDK 17
+            uses: actions/setup-java@v2
+            with:
+              distribution: 'adopt'
+              java-version: '17'
+              # Optionally, you can specify java-package: jdk # For a specific JDK package
+
+          - name: Build with Gradle
+            run: ./gradlew build --no-daemon
     
+          - name: Save JAR artifact
+            uses: actions/upload-artifact@v2
+            with:
+              name: CliTaxi-JAR
+              path: build/libs/CliTaxi-1.0-SNAPSHOT.jar 
+              
           - name: Login to Docker Hub
             uses: docker/login-action@v1
             with:
