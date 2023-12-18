@@ -1,10 +1,11 @@
+import com.ise.taxiapp.dataStructures.LinkedList;
 import com.ise.taxiapp.entities.Driver;
 import com.ise.taxiapp.entities.Fare;
 import com.ise.taxiapp.entities.Taxi;
-import com.ise.taxiapp.nav.Location;
-import com.ise.taxiapp.nav.Region;
 import com.ise.taxiapp.nav.Grid;
+import com.ise.taxiapp.nav.Location;
 import com.ise.taxiapp.nav.Point;
+import com.ise.taxiapp.nav.Region;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -27,6 +28,9 @@ public class RegionTest implements VehicleHiringTest {
         assertEquals(loc, new Point(1, 1));
         assertTrue(testRemoveVehicle("123"));
         assertEquals(0, region.taxiCount());
+        Point p = ((Grid) region).get(0, 1);
+        p.getObjects().add(new Taxi("1", new Driver("John", "2"), Fare.STANDARD_FARE));
+        assertEquals(1, testGetVehiclesInRange(new Point(0, 0), 1).size());
     }
 
     /**
@@ -80,7 +84,13 @@ public class RegionTest implements VehicleHiringTest {
      */
     @Override
     public List<String> testGetVehiclesInRange(Location loc, int r) {
-        // Todo
-        return null;
+        return ((Grid) region).neighboursOf((Point) loc)
+                .stream()
+                .filter(l -> l.distanceTo(loc) <= r)
+                .map(Point::getObjects)
+                .flatMap(LinkedList::stream)
+                .filter(l -> l instanceof Taxi)
+                .map(l -> ((Taxi) l).getReg())
+                .toList();
     }
 }
