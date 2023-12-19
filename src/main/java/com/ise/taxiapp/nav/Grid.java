@@ -97,12 +97,15 @@ public class Grid extends Region {
         // HashMap
         LinkedList<Point> visited = new LinkedList<>();
         queue.add(origin);
+        // Once the queue empties, there are no more neighbours left to check
         while (!queue.isEmpty()) {
+            // Retrieve the first element in the queue
             queue.findFirst();
             Point current = queue.get();
             visited.add(current);
             queue.remove();
             for (Point neighbour : neighboursOf(current)) {
+                // If we've already visited this point
                 if (visited.contains(neighbour)) continue;
                 if (origin.distanceTo(neighbour) > radius) continue;
                 for (Locatable item : neighbour.getObjects()) {
