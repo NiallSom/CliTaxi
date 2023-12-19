@@ -91,7 +91,7 @@ public class Grid extends Region {
      * @param radius    the radius within which to search for an object
      * @return the first acceptable object found, or null if none were found within the radius
      */
-    public Object findNearest(Point origin, Predicate<Locatable> predicate, double radius) {
+    private Locatable findNearest(Point origin, Predicate<Locatable> predicate, double radius) {
         // PriorityQueue
         LinkedList<Point> queue = new LinkedList<>();
         // HashMap
