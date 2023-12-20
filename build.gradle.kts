@@ -1,6 +1,5 @@
 plugins {
     id("java")
-    id("jacoco")
 }
 
 group = "com.ise.taxiapp"
@@ -22,11 +21,3 @@ tasks.jar {
 tasks.test {
     useJUnitPlatform()
 }
-jacocoTestReport {
-    reports {
-        xml.enabled true
-        html.enabled enabled
-    }
-}
-
-check.dependsOn jacocoTestReport
