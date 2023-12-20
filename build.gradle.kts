@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "com.ise.taxiapp"
-version = "1.1.0"
+version = "v1.1.0"
 
 repositories {
     mavenCentral()
