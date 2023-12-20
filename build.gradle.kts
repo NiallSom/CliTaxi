@@ -21,3 +21,11 @@ tasks.jar {
 tasks.test {
     useJUnitPlatform()
 }
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled enabled
+    }
+}
+
+check.dependsOn jacocoTestReport
