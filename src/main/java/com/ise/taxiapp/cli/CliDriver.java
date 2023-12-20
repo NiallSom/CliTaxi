@@ -159,6 +159,7 @@ public class CliDriver {
     /**
      * Provides the user with the option to run away, with a 10% success rate.
      * If the fail, they are charged double.
+     *
      * @param charge The original charge
      */
     public void optionToRun(double charge) {
@@ -228,10 +229,10 @@ public class CliDriver {
     public void printGrid() {
         System.out.printf("""
                     Key:
-                    %s☒: User
-                    %s☒: Standard Taxi
-                    %s☒: Express Taxi
-                    %s☒: XL Taxi
+                    %s■ : User
+                    %s■ : Standard Taxi
+                    %s■ : Express Taxi
+                    %s■ : XL Taxi
                 """, USER_COlOUR, Fare.STANDARD_FARE.getColour(), Fare.EXPRESS_FARE.getColour(), Fare.EXTRA_LARGE_FARE.getColour());
 
         for (int y = 0; y < grid.getHeight(); y++) {
